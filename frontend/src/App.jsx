@@ -7,6 +7,7 @@ import DoctorDetail from "./pages/DoctorDetail";
 import Doctors from "./res/Doctors";
 import PatientTabs from "./user/PatientTabs";
 import DoctorTabs from "./doctor/DoctorTabs";
+import MapComponent from "./pages/Map";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path="/doctordetail" element={<DoctorDetail />} />
           <Route path="/patientprofile" element={<PatientTabs />} />
           <Route path="/doctorprofile" element={<DoctorTabs />} />
+          <Route path="/map" element={<MapComponent />} />
         </Routes>
       </div>
     </BrowserRouter>

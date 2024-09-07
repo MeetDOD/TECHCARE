@@ -32,6 +32,9 @@ const Navbar = () => {
                 <NavLink to="/contact">
                     <li className='py-1 hover:bg-primary hover:bg-primary/90 hover:text-white px-2 rounded-md hover:-translate-y-1 transition duration-300'>Contact</li>
                 </NavLink>
+                <NavLink to="/map">
+                    <li className='py-1 hover:bg-primary hover:bg-primary/90 hover:text-white px-2 rounded-md hover:-translate-y-1 transition duration-300'>Map</li>
+                </NavLink>
             </ul>
             <div className='flex items-center gap-4'>
                 <Button size="icon" variant="ghost" onClick={toggleTheme}>
