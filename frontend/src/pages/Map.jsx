@@ -5,7 +5,6 @@ import axios from 'axios';
 import 'leaflet/dist/leaflet.css';
 import marker1 from "../assets/map/marker.png";
 import marker2 from "../assets/map/hospital.png";
-import { Input } from '@/components/ui/input';
 
 const redIcon = new L.Icon({
     iconUrl: marker1,
@@ -23,9 +22,9 @@ const greenIcon = new L.Icon({
 
 const MapComponent = () => {
     const [position, setPosition] = useState(null);
-    const [places, setPlaces] = useState([]);
-    const [searchTerm, setSearchTerm] = useState('');
-    const [suggestions, setSuggestions] = useState([]);
+    const [hospitals, setHospitals] = useState([]);
+    const [pharmacy, setpharmacy] = useState([]);
+    const [clinics, setClinics] = useState([]);
 
     useEffect(() => {
         navigator.geolocation.getCurrentPosition(
@@ -35,87 +34,109 @@ const MapComponent = () => {
         );
     }, []);
 
+    const fetchNearbyPlaces = async (query, setPlaces) => {
+        const bbox = `${position[1] - 0.05},${position[0] - 0.05},${position[1] + 0.05},${position[0] + 0.05}`;
+        const url = `https://nominatim.openstreetmap.org/search?q=${query}&format=json&limit=5&viewbox=${bbox}&bounded=1`;
+
+        try {
+            const response = await axios.get(url);
+            setPlaces(response.data);
+            console.log(response)
+        } catch (error) {
+            console.error(`Error fetching nearby ${query}:`, error);
+        }
+    };
+
     useEffect(() => {
         if (position) {
-            const fetchNearbyPlaces = async () => {
-                const bbox = `${position[1] - 0.05},${position[0] - 0.05},${position[1] + 0.05},${position[0] + 0.05}`;
-                const url = `https://nominatim.openstreetmap.org/search?q=Hospital&format=json&limit=10&viewbox=${bbox}&bounded=1`;
-
-                try {
-                    const response = await axios.get(url);
-                    setPlaces(response.data);
-                } catch (error) {
-                    console.error('Error fetching nearby places:', error);
-                }
-            };
-
-            fetchNearbyPlaces();
+            fetchNearbyPlaces('Hospital', setHospitals);
+            fetchNearbyPlaces('pharmacy', setpharmacy);
+            fetchNearbyPlaces('Clinic', setClinics);
         }
     }, [position]);
 
-    useEffect(() => {
-        const fetchSuggestions = async () => {
-            if (searchTerm.length > 2) {
-                const url = `https://nominatim.openstreetmap.org/search?q=${searchTerm}&format=json&limit=5`;
-                try {
-                    const response = await axios.get(url);
-                    setSuggestions(response.data);
-                } catch (error) {
-                    console.error('Error fetching suggestions:', error);
-                }
-            } else {
-                setSuggestions([]);
-            }
-        };
-
-        const debounceFetch = setTimeout(fetchSuggestions, 300);
-        return () => clearTimeout(debounceFetch);
-    }, [searchTerm]);
-
     return (
-        <div className="relative h-screen w-full rounded-lg">
-            <Input
-                type="text"
-                placeholder="Search for places..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="p-2 rounded-lg mb-4 w-full"
-            />
+        <div>
+            <div className="relative h-screen w-full rounded-lg">
 
-            {suggestions.length > 0 && (
-                <ul className="absolute bg-white border rounded-md w-full z-10">
-                    {suggestions.map((suggestion, index) => (
-                        <li
-                            key={index}
-                            className="p-2 hover:bg-gray-200 cursor-pointer"
-                            onClick={() => {
-                                setSearchTerm(suggestion.display_name);
-                                setPosition([suggestion.lat, suggestion.lon]);
-                                setSuggestions([]);
-                            }}
-                        >
-                            {suggestion.display_name}
-                        </li>
-                    ))}
-                </ul>
-            )}
+                {hospitals.length > 0 && (
+                    <div className="my-2 pb-5">
+                        <h2 className="text-xl font-bold my-2">Nearest <span className='text-primary'>Hospitals</span></h2>
+                        <div className="flex overflow-x-auto space-x-3 pb-4">
+                            {hospitals.map((place, index) => (
+                                <div key={index} className="min-w-[300px] p-2 border rounded-md shadow-md" style={{
+                                    borderColor: `var(--borderColor)`,
+                                }}>
+                                    <h2 className='text-[10px] p-1 bg-blue-100 rounded-full px-2 text-primary w-fit'>{place.name}</h2>
+                                    <h3 className="font-bold opacity-95 text-sm my-3">{place.display_name}</h3>
+                                    <p className="text-xs opacity-90">Lat: {place.lat}, Lon: {place.lon}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
 
-            {position && (
-                <MapContainer center={position} zoom={14} className="w-full h-3/4 rounded-lg shadow-lg">
-                    <TileLayer
-                        url={`https://api.maptiler.com/maps/outdoor-v2/256/{z}/{x}/{y}.png?key=api_key_please`}
-                    />
-                    <Marker position={position} icon={redIcon}>
-                        <Popup>Your Current Location</Popup>
-                    </Marker>
+                {clinics.length > 0 && (
+                    <div className="my-2 pb-5">
+                        <h2 className="text-xl font-bold my-2">Nearest <span className='text-primary'>Clinics</span></h2>
+                        <div className="flex overflow-x-auto space-x-3 pb-4">
+                            {clinics.map((place, index) => (
+                                <div key={index} className="min-w-[300px] p-2 border rounded-md shadow-md " style={{
+                                    borderColor: `var(--borderColor)`,
+                                }}>
+                                    <h2 className='text-[10px] p-1 bg-blue-100 rounded-full px-2 text-primary w-fit'>{place.name}</h2>
+                                    <h3 className="font-bold opacity-95 text-sm my-3">{place.display_name}</h3>
+                                    <p className="text-xs opacity-90">Lat: {place.lat}, Lon: {place.lon}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
 
-                    {places.map((place, index) => (
-                        <Marker key={index} position={[place.lat, place.lon]} icon={greenIcon}>
-                            <Popup>{place.display_name}</Popup>
+                {pharmacy.length > 0 && (
+                    <div className="my-2 pb-5">
+                        <h2 className="text-xl font-bold my-2">Nearest <span className='text-primary'>Pharmacy Centers</span></h2>
+                        <div className="flex overflow-x-auto space-x-3 pb-4">
+                            {pharmacy.map((place, index) => (
+                                <div key={index} className="min-w-[300px] p-2 border rounded-md shadow-md " style={{
+                                    borderColor: `var(--borderColor)`,
+                                }}>
+                                    <h2 className='text-[10px] p-1 bg-blue-100 rounded-full px-2 text-primary w-fit'>{place.name}</h2>
+                                    <h3 className="font-bold opacity-95 text-sm my-3">{place.display_name}</h3>
+                                    <p className="text-xs opacity-90">Lat: {place.lat}, Lon: {place.lon}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {position && (
+                    <MapContainer center={position} zoom={15} className="w-full h-3/4 rounded-lg shadow-lg">
+                        <TileLayer
+                            url={`https://api.maptiler.com/maps/streets-v2/256/{z}/{x}/{y}.png?key=api_key_bhai`}
+                        />
+                        <Marker position={position} icon={redIcon}>
+                            <Popup>Your Current Location</Popup>
                         </Marker>
-                    ))}
-                </MapContainer>
-            )}
+
+                        {hospitals.map((place, index) => (
+                            <Marker key={index} position={[place.lat, place.lon]} icon={greenIcon}>
+                                <Popup>{place.display_name}</Popup>
+                            </Marker>
+                        ))}
+                        {pharmacy.map((place, index) => (
+                            <Marker key={index} position={[place.lat, place.lon]} icon={greenIcon}>
+                                <Popup>{place.display_name}</Popup>
+                            </Marker>
+                        ))}
+                        {clinics.map((place, index) => (
+                            <Marker key={index} position={[place.lat, place.lon]} icon={greenIcon}>
+                                <Popup>{place.display_name}</Popup>
+                            </Marker>
+                        ))}
+                    </MapContainer>
+                )}
+            </div>
         </div>
     );
 };
