@@ -1,11 +1,26 @@
 import React from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-
 import { Button } from '@/components/ui/button'
 import DoctorProfile from './DoctorProfile'
 import DoctorAppoinments from './DoctorAppoinments'
+import { useNavigate } from 'react-router-dom'
+import { useResetRecoilState } from 'recoil'
+import { tokenState, userState } from '@/store/atoms/userauth'
+import { toast } from 'sonner'
 
 const DoctorTabs = () => {
+    const resetToken = useResetRecoilState(tokenState);
+    const resetUser = useResetRecoilState(userState);
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        resetToken();
+        resetUser();
+        toast.success("Logged out successfully");
+        navigate("/login");
+    };
     return (
         <div>
             <Tabs defaultValue="profile" className="overflow-hidden">
@@ -13,8 +28,8 @@ const DoctorTabs = () => {
                     backgroundColor: `var(--background-color)`,
                 }} >
                     <TabsTrigger className="py-2" value="profile">My Profile</TabsTrigger>
-                    <TabsTrigger className="py-2" value="appointments">My Appointments</TabsTrigger>
-                    <TabsTrigger className="py-2" value="logout"><Button variant="destructive">Logout</Button></TabsTrigger>
+                    <TabsTrigger className="py-2" value="appointments">Appointments Books</TabsTrigger>
+                    <Button variant="destructive" onClick={handleLogout} className="py-2 mx-2" >Logout</Button>
                 </TabsList>
 
                 <TabsContent value="profile" className="flex flex-col justify-center items-center">

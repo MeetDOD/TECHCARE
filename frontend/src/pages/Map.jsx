@@ -5,6 +5,7 @@ import axios from 'axios';
 import 'leaflet/dist/leaflet.css';
 import marker1 from "../assets/map/marker.png";
 import marker2 from "../assets/map/hospital.png";
+import { Skeleton } from "@/components/ui/skeleton"
 
 const redIcon = new L.Icon({
     iconUrl: marker1,
@@ -25,6 +26,7 @@ const MapComponent = () => {
     const [hospitals, setHospitals] = useState([]);
     const [pharmacy, setpharmacy] = useState([]);
     const [clinics, setClinics] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         navigator.geolocation.getCurrentPosition(
@@ -41,27 +43,36 @@ const MapComponent = () => {
         try {
             const response = await axios.get(url);
             setPlaces(response.data);
-            console.log(response)
+            setLoading(false);
         } catch (error) {
             console.error(`Error fetching nearby ${query}:`, error);
+            setLoading(false);
         }
     };
 
     useEffect(() => {
         if (position) {
             fetchNearbyPlaces('Hospital', setHospitals);
-            fetchNearbyPlaces('pharmacy', setpharmacy);
+            fetchNearbyPlaces('Pharmacy', setpharmacy);
             fetchNearbyPlaces('Clinic', setClinics);
         }
     }, [position]);
+
+    const renderSkeletons = () => (
+        <div className="flex overflow-x-auto space-x-3 pb-4">
+            {[...Array(5)].map((_, index) => (
+                <Skeleton key={index} className="min-w-[300px] h-[150px] p-2" />
+            ))}
+        </div>
+    );
 
     return (
         <div>
             <div className="relative h-screen w-full rounded-lg">
 
-                {hospitals.length > 0 && (
-                    <div className="my-2 pb-5">
-                        <h2 className="text-xl font-bold my-2">Nearest <span className='text-primary'>Hospitals</span></h2>
+                <div className="my-2 pb-5">
+                    <h2 className="text-xl font-bold my-2">Nearest <span className='text-primary'>Hospitals</span></h2>
+                    {loading ? renderSkeletons() : (
                         <div className="flex overflow-x-auto space-x-3 pb-4">
                             {hospitals.map((place, index) => (
                                 <div key={index} className="min-w-[300px] p-2 border rounded-md shadow-md" style={{
@@ -73,15 +84,15 @@ const MapComponent = () => {
                                 </div>
                             ))}
                         </div>
-                    </div>
-                )}
+                    )}
+                </div>
 
-                {clinics.length > 0 && (
-                    <div className="my-2 pb-5">
-                        <h2 className="text-xl font-bold my-2">Nearest <span className='text-primary'>Clinics</span></h2>
+                <div className="my-2 pb-5">
+                    <h2 className="text-xl font-bold my-2">Nearest <span className='text-primary'>Clinics</span></h2>
+                    {loading ? renderSkeletons() : (
                         <div className="flex overflow-x-auto space-x-3 pb-4">
                             {clinics.map((place, index) => (
-                                <div key={index} className="min-w-[300px] p-2 border rounded-md shadow-md " style={{
+                                <div key={index} className="min-w-[300px] p-2 border rounded-md shadow-md" style={{
                                     borderColor: `var(--borderColor)`,
                                 }}>
                                     <h2 className='text-[10px] p-1 bg-blue-100 rounded-full px-2 text-primary w-fit'>{place.name}</h2>
@@ -90,15 +101,15 @@ const MapComponent = () => {
                                 </div>
                             ))}
                         </div>
-                    </div>
-                )}
+                    )}
+                </div>
 
-                {pharmacy.length > 0 && (
-                    <div className="my-2 pb-5">
-                        <h2 className="text-xl font-bold my-2">Nearest <span className='text-primary'>Pharmacy Centers</span></h2>
+                <div className="my-2 pb-5">
+                    <h2 className="text-xl font-bold my-2">Nearest <span className='text-primary'>Pharmacy Centers</span></h2>
+                    {loading ? renderSkeletons() : (
                         <div className="flex overflow-x-auto space-x-3 pb-4">
                             {pharmacy.map((place, index) => (
-                                <div key={index} className="min-w-[300px] p-2 border rounded-md shadow-md " style={{
+                                <div key={index} className="min-w-[300px] p-2 border rounded-md shadow-md" style={{
                                     borderColor: `var(--borderColor)`,
                                 }}>
                                     <h2 className='text-[10px] p-1 bg-blue-100 rounded-full px-2 text-primary w-fit'>{place.name}</h2>
@@ -107,13 +118,15 @@ const MapComponent = () => {
                                 </div>
                             ))}
                         </div>
-                    </div>
-                )}
+                    )}
+                </div>
 
-                {position && (
+                {loading ? (
+                    <Skeleton className="w-full my-4" />
+                ) : (position && (
                     <MapContainer center={position} zoom={15} className="w-full h-3/4 rounded-lg shadow-lg">
                         <TileLayer
-                            url={`https://api.maptiler.com/maps/streets-v2/256/{z}/{x}/{y}.png?key=api_key_bhai`}
+                            url={`https://api.maptiler.com/maps/streets-v2/256/{z}/{x}/{y}.png?key=${import.meta.env.VITE_MAP_KEY}`}
                         />
                         <Marker position={position} icon={redIcon}>
                             <Popup>Your Current Location</Popup>
@@ -135,7 +148,7 @@ const MapComponent = () => {
                             </Marker>
                         ))}
                     </MapContainer>
-                )}
+                ))}
             </div>
         </div>
     );

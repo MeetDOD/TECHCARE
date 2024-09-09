@@ -7,7 +7,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import axios from 'axios';
 
-const Register = () => {
+const DoctorRegister = () => {
     const [firstName, setFirstname] = useState("");
     const [lastName, setLastname] = useState("");
     const [email, setEmail] = useState("");
@@ -21,15 +21,15 @@ const Register = () => {
         setShowPassword(!showPassword);
     };
     const handleSubmit = async (e) => {
+
         e.preventDefault();
 
         if (!firstName || !lastName || !email || !password) {
             toast.error('All fields are required');
             return;
         }
-
         try {
-            const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/user/register`, {
+            const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/doctor/register`, {
                 firstName, lastName, email, password
             });
 
@@ -37,7 +37,7 @@ const Register = () => {
                 setIsOtpSent(true);
                 toast.success(res.data.message);
             } else if (res.status === 400) {
-                toast.error("User already exists");
+                toast.error("Doctor already exists");
             }
         } catch (err) {
             toast.error('Server Error');
@@ -45,14 +45,20 @@ const Register = () => {
     };
 
     const handleVerifyOtp = async () => {
+
+        if (!otp) {
+            toast.error('OTP is required');
+            return;
+        }
+
         try {
-            const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/user/verify-otp`, {
+            const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/doctor/verify-otp`, {
                 email, enteredOTP: otp, firstName, lastName, password
             });
 
             if (res.status === 200) {
                 toast.success(res.data.message);
-                navigate("/login");
+                navigate("/doctorlogin");
             } else if (res.status === 400) {
                 toast.error(res.data.message);
             }
@@ -67,7 +73,7 @@ const Register = () => {
                 borderColor: `var(--borderColor)`,
             }}>
                 <p className='text-2xl font-bold'>Join Techcare</p>
-                <p className='text-sm leading-tight mb-1 opacity-95'>Are you a doctor ? <Link to="/doctorregister"><span className='text-primary font-semibold'> Register Here</span></Link></p>
+                <p className='text-sm leading-tight mb-1 opacity-95'>Not a doctor ? <Link to="/register"><span className='text-primary font-semibold'> Register Here</span></Link></p>
 
                 <Label htmlFor="firstname">First Name</Label>
                 <Input type="text" value={firstName} onChange={(e) => setFirstname(e.target.value)} placeholder="Enter your first name" required />
@@ -97,7 +103,7 @@ const Register = () => {
                 {!isOtpSent && (
                     <>
                         <Button className="w-full mt-4" type="button" onClick={handleSubmit}>Register</Button>
-                        <Button variant="ghost" className="border w-full" onClick={() => navigate("/login")}>Login</Button>
+                        <Button variant="ghost" className="border w-full" onClick={() => navigate("/doctorlogin")}>Login</Button>
                     </>
                 )}
 
@@ -114,4 +120,4 @@ const Register = () => {
     );
 };
 
-export default Register;
+export default DoctorRegister;

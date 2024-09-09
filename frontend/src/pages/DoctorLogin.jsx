@@ -7,7 +7,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import axios from 'axios';
 
-const Login = () => {
+const DoctorLogin = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
@@ -26,12 +26,13 @@ const Login = () => {
         }
 
         try {
-            const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/user/login`, { email, password });
+            const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/doctor/login`, { email, password });
 
             if (res.status === 200 && res.data.token) {
                 toast.success('Login successful');
-                localStorage.setItem('token', res.data.token);
-                localStorage.setItem('user', JSON.stringify(res.data.user));
+                localStorage.setItem('doctortoken', res.data.token);
+                localStorage.setItem('doctor', JSON.stringify(res.data.Doctor));
+                console.log(res.data.Doctor)
                 navigate('/');
             } else if (res.data.message) {
                 toast.error(res.data.message);
@@ -46,8 +47,8 @@ const Login = () => {
             <div className='flex flex-col gap-3 m-auto items-start p-8 min-w-[340px] sm:min-w-96 rounded-xl text-sm shadow-md border' style={{
                 borderColor: `var(--borderColor)`,
             }} >
-                <p className='text-2xl font-bold'>Welcome User</p>
-                <p className='text-sm leading-tight mb-1 opacity-95'>Are you a doctor ? <Link to="/doctorlogin"><span className='text-primary font-semibold'> Login Here</span></Link></p>
+                <p className='text-2xl font-bold'>Welcome Doctor</p>
+                <p className='text-sm leading-tight mb-1 opacity-95'>Not a doctor ? <Link to="/login"><span className='text-primary font-semibold'> Login Here</span></Link></p>
 
                 <Label htmlFor="email">Email</Label>
                 <Input
@@ -76,10 +77,10 @@ const Login = () => {
                 </div>
 
                 <Button className="w-full mt-4" type="submit">Login</Button>
-                <Button variant="ghost" className="border w-full" onClick={() => navigate("/register")}>Register</Button>
+                <Button variant="ghost" className="border w-full" onClick={() => navigate("/doctorregister")}>Register</Button>
             </div>
         </form>
     );
 };
 
-export default Login;
+export default DoctorLogin;

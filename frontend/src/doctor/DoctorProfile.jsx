@@ -13,8 +13,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { FaUserEdit } from "react-icons/fa";
+import { useRecoilValue } from 'recoil';
+import { doctorState } from '@/store/atoms/userauth';
 
 const DoctorProfile = () => {
+
+    const doctor = useRecoilValue(doctorState);
+
     return (
         <div>
             <form className='mb-5'>
@@ -23,25 +28,25 @@ const DoctorProfile = () => {
                 }}>
                     <div className="gap-4 mx-auto flex flex-col items-center">
                         <img
-                            src={doc}
+                            src={doctor.profilePhoto}
                             alt="User Avatar"
                             className="w-24 h-24 rounded-full border-2 shadow-sm object-cover"
                         />
-                        <h2 className="text-2xl font-semibold">User Profile</h2>
+                        <h2 className="text-2xl font-semibold">{doctor.firstName}'s Profile</h2>
                     </div>
                     <div className="gap-1.5 mt-2">
                         <p className="font-medium">
-                            First Name: <span className='opacity-90'>Meet</span>
+                            First Name: <span className='opacity-90'>{doctor.firstName}</span>
                         </p>
                     </div>
                     <div className="gap-1.5">
                         <p className="font-medium">
-                            Last Name: <span className='opacity-90'>Dodiya</span>
+                            Last Name: <span className='opacity-90'>{doctor.lastName}</span>
                         </p>
                     </div>
                     <div className="gap-1.5">
                         <p className="font-medium">
-                            Email Id: <span className='opacity-90'>dodiyameet041@gmail.com</span>
+                            Email Id: <span className='opacity-90'>{doctor.email}</span>
                         </p>
                     </div>
                     <div className="gap-1.5">
