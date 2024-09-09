@@ -15,7 +15,7 @@ const Hero = () => {
                             <FaArrowRight color="#ca8a04" className="group-hover:translate-x-1 transition duration-300" />
                         </div>
 
-                        <div className="flex md:hidden sm:flex lg:flex gap-5 py-5">
+                        <div className="hidden lg:flex gap-5 py-5">
                             <div className="flex justify-center gap-2 items-center opacity-90 text-sm ">
                                 <FaArrowRight className="opacity-90 -mr-1" /> Verified Doctors
                             </div>

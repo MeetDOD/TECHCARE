@@ -1,10 +1,10 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import Navbar from "./res/Navbar";
+import Navbar from "./snippets/Navbar";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import DoctorDetail from "./pages/DoctorDetail";
-import Doctors from "./res/Doctors";
+import Doctors from "./snippets/Doctors";
 import PatientTabs from "./user/PatientTabs";
 import DoctorTabs from "./doctor/DoctorTabs";
 import MapComponent from "./pages/Map";
@@ -28,7 +28,7 @@ function App() {
           <>
             <Route path="/" element={<Home />} />
             <Route path="/doctors" element={<Doctors />} />
-            <Route path="/doctordetail" element={<DoctorDetail />} />
+            <Route path="/doctordetail/:id" element={<DoctorDetail />} />
 
             <Route path="/map" element={
               <ProtectedRoute>

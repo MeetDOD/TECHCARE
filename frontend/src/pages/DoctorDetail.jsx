@@ -1,6 +1,5 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import doc from "../assets/demo/doc.png"
 import { MdVerified, MdBadge } from "react-icons/md";
 import { Button } from '@/components/ui/button';
 import { Calendar } from "@/components/ui/calendar";
@@ -12,12 +11,34 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog";
-import RelatedDoctor from '@/res/RelatedDoctor';
+import RelatedDoctor from '@/snippets/RelatedDoctor';
+import axios from 'axios';
 
 const DoctorDetail = () => {
 
-    const { docId } = useParams();
+    const { id } = useParams();
+    const [doctorData, setDoctorData] = useState(null);
     const [selectedDate, setSelectedDate] = useState(null);
+
+    useEffect(() => {
+        const fetchDoctorData = async () => {
+            try {
+                const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/doctor/getdrbyid/${id}`);
+                setDoctorData(response.data.doctor);
+                console.log(response.data.doctor)
+            } catch (error) {
+                console.error("Error fetching doctor details:", error);
+            }
+        };
+
+        if (id) {
+            fetchDoctorData();
+        }
+    }, [id]);
+
+    if (!doctorData) {
+        return <div>Loading...</div>;
+    }
 
     const timeSlots = [
         "9:00 AM", "10:00 AM", "11:00 AM", "12:00 PM", "1:00 PM", "2:00 PM", "3:00 PM",
@@ -28,27 +49,55 @@ const DoctorDetail = () => {
         <div className='overflow-hidden'>
             <div className='flex flex-col sm:flex-col md:flex-col lg:flex-row gap-4'>
                 <div className='items-center flex justify-center'>
-                    <img src={doc} className='w-full sm:max-w-72 rounded-lg border shadow-sm' style={{
+                    <img src={doctorData.profilePhoto} className='w-full sm:max-w-80 rounded-lg border shadow-sm' style={{
                         borderColor: `var(--borderColor)`
                     }} />
                 </div>
                 <div className='flex-1 border rounded-lg p-8 py-7 mx-2 sm:mx-0 sm:mt-0 shadow-sm' style={{
                     borderColor: `var(--borderColor)`
                 }}>
-                    <p className='flex items-center gap-1.5 text-2xl font-bold'>Dr. Ramesh Yadav<MdVerified size={23} /></p>
-                    <div className='flex items-center gap-2 text-sm mt-1 opacity-95 font-semibold'>
-                        <p>MBBS - Skin Specialist</p>
+                    <p className='flex items-center gap-1.5 text-2xl font-bold'>{doctorData.firstName} {doctorData.lastName}<MdVerified size={23} /></p>
+                    <div className='flex items-center gap-2 text-sm my-2 opacity-95 font-semibold'>
+                        <p>{doctorData.specialization}</p>
                         <p className='py-0.5 px-2 border-2 text-xs rounded-full' style={{
                             borderColor: `var(--borderColor)`
-                        }}>5 Years</p>
+                        }}>{doctorData.experience} Years</p>
                     </div>
 
-                    <div>
-                        <p className='flex items-center gap-1.5 text-lg font-medium mt-3'><MdBadge size={23} />About</p>
-                        <p className='text-sm max-w-[700px] mt-1 opacity-90'>Lorem ipsum, dolor sit amet consectetur adipisicing elit Lorem ipsum dolor sit amet consectetur adipisicing elit...</p>
+                    <p className='text-[15px] font-medium my-1 mt-2'>Language Spoken</p>
+                    <div className='flex items-center mt-2 gap-2'>
+                        {doctorData.languageSpoken && doctorData.languageSpoken.length > 0 ? (
+                            JSON.parse(doctorData.languageSpoken[0]).map((language, index) => (
+                                <p
+                                    key={index}
+                                    className='py-0.5 px-2 border-2 text-xs w-fit rounded-full border-primary bg-primary/20'
+                                >
+                                    {language}
+                                </p>
+                            ))
+                        ) : (
+                            <p className='opacity-80 text-sm'>Data is not available</p>
+                        )}
                     </div>
-                    <p className='font-medium mt-4 opacity-95'>
-                        Appointment Fee: <span className=''>$ 50</span>
+
+                    <p className='text-[15px] font-medium my-1 mt-2'>Medical Achievements</p>
+                    <div className='flex md:flex-row mt-2 opacity-90 gap-2'>
+                        {doctorData.medicalAchievements && doctorData.medicalAchievements.length > 0 ? (
+                            JSON.parse(doctorData.medicalAchievements[0]).map((achi, index) => (
+                                <p
+                                    key={index}
+                                    className='py-0.5 px-2 border-2 text-sm w-fit rounded-lg border-yellow-400 bg-yellow-400/20'
+                                >
+                                    {achi}
+                                </p>
+                            ))
+                        ) : (
+                            <p className='opacity-80 text-sm'>Data is not available</p>
+                        )}
+                    </div>
+
+                    <p className='font-semibold text-lg mt-2 opacity-95'>
+                        Appointment Fee: <span className='font-bold'>$ {doctorData.consultationFee}</span>
                     </p>
                 </div>
             </div>

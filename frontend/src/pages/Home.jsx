@@ -1,7 +1,7 @@
 import { useTheme } from '@/components/ui/themeprovider';
-import Hero from '@/home/Hero';
-import Categories from '@/res/Categories';
-import Doctors from '@/res/Doctors';
+import Hero from '../home/Hero';
+import Categories from '../snippets/Categories';
+import Doctors from '../snippets/Doctors';
 import React from 'react';
 
 const Home = () => {
