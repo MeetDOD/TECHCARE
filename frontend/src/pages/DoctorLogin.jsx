@@ -5,13 +5,17 @@ import { Button } from '@/components/ui/button';
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
-import axios from 'axios';
+import { doctorlogin } from '@/apis/doctorapi';
+import { doctorState, doctortokenState } from '@/store/atoms/userauth';
+import { useSetRecoilState } from 'recoil';
 
 const DoctorLogin = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
+    const setDoctorToken = useSetRecoilState(doctortokenState);
+    const setDoctor = useSetRecoilState(doctorState);
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
@@ -26,13 +30,13 @@ const DoctorLogin = () => {
         }
 
         try {
-            const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/doctor/login`, { email, password });
-
+            const res = await doctorlogin({ email, password });
             if (res.status === 200 && res.data.token) {
                 toast.success('Login successful');
                 localStorage.setItem('doctortoken', res.data.token);
                 localStorage.setItem('doctor', JSON.stringify(res.data.Doctor));
-                console.log(res.data.Doctor)
+                setDoctorToken(res.data.token);
+                setDoctor(res.data.Doctor);
                 navigate('/');
             } else if (res.data.message) {
                 toast.error(res.data.message);

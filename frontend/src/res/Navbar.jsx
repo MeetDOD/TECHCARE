@@ -7,7 +7,7 @@ import { MdOutlineArrowDropDown } from "react-icons/md";
 import { GiHamburgerMenu, GiCancel } from "react-icons/gi";
 import logo from "../assets/hero/logo.png"
 import { useRecoilValue, useResetRecoilState } from 'recoil';
-import { doctorState, loggedInState, tokenState, userState } from "../store/atoms/userauth";
+import { doctorState, doctortokenState, loggedInState, tokenState, userState } from "../store/atoms/userauth";
 import { toast } from 'sonner';
 
 const Navbar = () => {
@@ -18,12 +18,22 @@ const Navbar = () => {
     const isLoggedIn = useRecoilValue(loggedInState);
     const user = useRecoilValue(userState);
     const doctor = useRecoilValue(doctorState);
+    const resetToken = useResetRecoilState(tokenState);
+    const resetUser = useResetRecoilState(userState);
+    const resetDoctorToken = useResetRecoilState(doctortokenState);
+    const resetDoctor = useResetRecoilState(doctorState);
 
     const handleLogout = () => {
         localStorage.removeItem("token");
         localStorage.removeItem("user");
         localStorage.removeItem("doctortoken");
         localStorage.removeItem("doctor");
+
+        resetToken();
+        resetUser();
+        resetDoctorToken();
+        resetDoctor();
+
         toast.success("Logged out successfully");
         navigate("/login");
     };
@@ -64,7 +74,7 @@ const Navbar = () => {
                                 borderColor: `var(--borderColor)`,
                             }} />
                             :
-                            <img className='w-8 h-8 rounded-full border object-cover"' src={doctor.profilePhoto} alt={doctor.firstName} style={{
+                            <img className='w-8 h-8 rounded-full border object-cover"' src={doctor.photo} alt={doctor.firstName} style={{
                                 borderColor: `var(--borderColor)`,
                             }} />
                         }

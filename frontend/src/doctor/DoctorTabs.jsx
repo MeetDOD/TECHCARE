@@ -5,19 +5,19 @@ import DoctorProfile from './DoctorProfile'
 import DoctorAppoinments from './DoctorAppoinments'
 import { useNavigate } from 'react-router-dom'
 import { useResetRecoilState } from 'recoil'
-import { tokenState, userState } from '@/store/atoms/userauth'
+import { doctorState, doctortokenState } from '@/store/atoms/userauth'
 import { toast } from 'sonner'
 
 const DoctorTabs = () => {
-    const resetToken = useResetRecoilState(tokenState);
-    const resetUser = useResetRecoilState(userState);
+    const resetDoctorToken = useResetRecoilState(doctortokenState);
+    const resetDoctor = useResetRecoilState(doctorState);
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-        resetToken();
-        resetUser();
+        localStorage.removeItem("doctortoken");
+        localStorage.removeItem("doctor");
+        resetDoctorToken();
+        resetDoctor();
         toast.success("Logged out successfully");
         navigate("/login");
     };

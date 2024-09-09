@@ -1,17 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from '@/components/ui/button';
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
-import axios from 'axios';
+import { userlogin } from '@/apis/userapi';
+import { tokenState, userState } from '@/store/atoms/userauth';
+import { useSetRecoilState } from 'recoil';
 
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
+    const setToken = useSetRecoilState(tokenState);
+    const setUser = useSetRecoilState(userState);
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
@@ -26,12 +30,16 @@ const Login = () => {
         }
 
         try {
-            const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/user/login`, { email, password });
-
+            const res = await userlogin({ email, password });
             if (res.status === 200 && res.data.token) {
                 toast.success('Login successful');
+
                 localStorage.setItem('token', res.data.token);
                 localStorage.setItem('user', JSON.stringify(res.data.user));
+
+                setToken(res.data.token);
+                setUser(res.data.user);
+
                 navigate('/');
             } else if (res.data.message) {
                 toast.error(res.data.message);

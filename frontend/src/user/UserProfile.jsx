@@ -13,20 +13,20 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { FaUserEdit } from "react-icons/fa";
 import { userState } from '@/store/atoms/userauth';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { toast } from 'sonner';
-import axios from 'axios';
+import { userupdateProfile } from '@/apis/userapi';
 
 const UserProfile = () => {
-    const user = useRecoilValue(userState);
 
-    const [photo, setphoto] = useState(null);
+    const user = useRecoilValue(userState);
+    const setUser = useSetRecoilState(userState);
+
+    const [profilePhoto, setprofilePhoto] = useState(null);
     const [photoPreview, setPhotoPreview] = useState(user.photo || "");
     const [firstName, setfirstName] = useState("");
     const [lastName, setlastName] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
     const [phoneno, setphoneno] = useState("");
     const [gender, setgender] = useState("");
     const [dateofbirth, setdateofbirth] = useState("");
@@ -35,14 +35,13 @@ const UserProfile = () => {
         if (user) {
             setfirstName(user.firstName);
             setlastName(user.lastName);
-            setEmail(user.email);
         }
     }, [user]);
 
     const handlePhotoChange = (e) => {
         const file = e.target.files[0];
         if (file) {
-            setphoto(file);
+            setprofilePhoto(file);
             setPhotoPreview(URL.createObjectURL(file));
         }
     };
@@ -50,23 +49,24 @@ const UserProfile = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const formData = new FormData();
-        formData.append('photo', photo);
+        formData.append('profilePhoto', profilePhoto);
         formData.append('firstName', firstName);
         formData.append('lastName', lastName);
-        formData.append('email', email);
-        formData.append('password', password);
         formData.append('phoneno', phoneno);
         formData.append('gender', gender);
         formData.append('dateofbirth', dateofbirth);
-        formData.append('Id', user._id);
 
         try {
-            const { data } = await axios.put(`${import.meta.env.VITE_BASE_URL}/api/user/update-profile`, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
-            toast.success("Profile edited successfully");
+            const response = await userupdateProfile(formData);
+            console.log(response);
+            if (response.status === 200) {
+                toast.success("Profile updated successfully");
+                const updatedUser = response.data.user;
+                localStorage.setItem('user', JSON.stringify(updatedUser));
+                setUser(updatedUser);
+            } else {
+                toast.error("Error updating profile");
+            }
         } catch (error) {
             toast.error("Please fill properly");
             console.log(error);
@@ -125,7 +125,6 @@ const UserProfile = () => {
                                         <FaUserEdit size={25} /> Edit your profile
                                     </DrawerTitle>
                                 </DrawerHeader>
-
                                 <div className="gap-4 mx-auto flex flex-row mb-3 items-center">
                                     <img
                                         src={photoPreview}
@@ -148,7 +147,6 @@ const UserProfile = () => {
                                         <IoIosAddCircleOutline size={30} className="opacity-90 cursor-pointer" />
                                     </div>
                                 </div>
-
                                 <div className="grid grid-cols-2 gap-4 px-4 mb-4">
                                     <div>
                                         <Label htmlFor="firstname" className="text-sm font-medium">
@@ -164,7 +162,6 @@ const UserProfile = () => {
                                             required
                                         />
                                     </div>
-
                                     <div>
                                         <Label htmlFor="lastname" className="text-sm font-medium">
                                             Last Name
@@ -179,37 +176,6 @@ const UserProfile = () => {
                                             required
                                         />
                                     </div>
-
-                                    <div>
-                                        <Label htmlFor="email" className="text-sm font-medium">
-                                            Email
-                                        </Label>
-                                        <Input
-                                            type="email"
-                                            id="email"
-                                            value={email}
-                                            onChange={(e) => setEmail(e.target.value)}
-                                            placeholder="Enter your email"
-                                            className="mt-1 rounded-md"
-                                            required
-                                        />
-                                    </div>
-
-                                    <div>
-                                        <Label htmlFor="password" className="text-sm font-medium">
-                                            Password
-                                        </Label>
-                                        <Input
-                                            type="password"
-                                            id="password"
-                                            value={password}
-                                            onChange={(e) => setPassword(e.target.value)}
-                                            placeholder="Enter your password"
-                                            className="mt-1 rounded-md"
-                                            required
-                                        />
-                                    </div>
-
                                     <div>
                                         <Label htmlFor="phoneno" className="text-sm font-medium">
                                             Phone Number
@@ -224,7 +190,6 @@ const UserProfile = () => {
                                             required
                                         />
                                     </div>
-
                                     <div>
                                         <Label htmlFor="gender" className="text-sm font-medium">
                                             Gender
@@ -240,7 +205,6 @@ const UserProfile = () => {
                                         />
                                     </div>
                                 </div>
-
                                 <div className="mb-4 px-4">
                                     <Label htmlFor="dateofbirth" className="block text-sm font-medium">
                                         Birth Date
@@ -254,7 +218,6 @@ const UserProfile = () => {
                                         required
                                     />
                                 </div>
-
                                 <DrawerFooter>
                                     <Button onClick={handleSubmit}>Save</Button>
                                     <DrawerClose asChild>
