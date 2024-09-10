@@ -30,10 +30,11 @@ const Hero = () => {
 
                         <div className="py-5">
                             <h1 className="mb-2 font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl sm:leading-snug leading-normal">
-                                Web App to Desktop in minutes
+                                Instant appointment with doctors
                             </h1>
                             <p className="text-base sm:text-lg md:text-lg lg:text-xl mt-4 font-semibold opacity-95">
-                                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Totam, error. Lorem ipsum dolor sit amet.
+                                Consult top doctors online for any health concern
+                                Private online consultations with verified doctors in all specialists
                             </p>
                         </div>
 
