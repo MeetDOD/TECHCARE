@@ -38,7 +38,7 @@ const MapComponent = () => {
 
     const fetchNearbyPlaces = async (query, setPlaces) => {
         const bbox = `${position[1] - 0.05},${position[0] - 0.05},${position[1] + 0.05},${position[0] + 0.05}`;
-        const url = `https://nominatim.openstreetmap.org/search?q=${query}&format=json&limit=5&viewbox=${bbox}&bounded=1`;
+        const url = `https://nominatim.openstreetmap.org/search?q=${query}&format=json&limit=10&viewbox=${bbox}&bounded=1`;
 
         try {
             const response = await axios.get(url);
@@ -60,7 +60,7 @@ const MapComponent = () => {
 
     const renderSkeletons = () => (
         <div className="flex overflow-x-auto space-x-3 pb-4">
-            {[...Array(5)].map((_, index) => (
+            {[...Array(10)].map((_, index) => (
                 <Skeleton key={index} className="min-w-[300px] h-[150px] p-2" />
             ))}
         </div>
