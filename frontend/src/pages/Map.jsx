@@ -80,8 +80,44 @@ const MapComponent = () => {
 
     return (
         <div>
-            <div className="relative h-screen w-full rounded-lg">
-                <div className="my-2 pb-5">
+            <div className='my-5 '>
+                <h1 className='text-2xl md:text-3xl font-bold'>
+                    Map at your <span className='text-primary'>Fingertip</span>
+                </h1>
+                <p className='text-lg opacity-90 my-2'>
+                    Find the best nearest Doctors, Hospitals and Clinics within few clicks
+                </p>
+            </div>
+            <div>
+                {loading ? (
+                    <Skeleton className="w-full" />
+                ) : (position && (
+                    <MapContainer center={position} zoom={15} className="h-screen w-full rounded-lg shadow-lg -z-50">
+                        <TileLayer
+                            url={`https://api.maptiler.com/maps/streets-v2/256/{z}/{x}/{y}.png?key=${import.meta.env.VITE_MAP_KEY}`}
+                        />
+                        <Marker position={position} icon={redIcon}>
+                            <Popup>Your Current Location</Popup>
+                        </Marker>
+
+                        {hospitals.map((place, index) => (
+                            <Marker key={index} position={[place.lat, place.lon]} icon={greenIcon}>
+                                <Popup>{place.display_name}</Popup>
+                            </Marker>
+                        ))}
+                        {pharmacy.map((place, index) => (
+                            <Marker key={index} position={[place.lat, place.lon]} icon={greenIcon}>
+                                <Popup>{place.display_name}</Popup>
+                            </Marker>
+                        ))}
+                        {clinics.map((place, index) => (
+                            <Marker key={index} position={[place.lat, place.lon]} icon={greenIcon}>
+                                <Popup>{place.display_name}</Popup>
+                            </Marker>
+                        ))}
+                    </MapContainer>
+                ))}
+                <div className="my-2 pb-5 mt-5">
                     <h2 className="text-xl font-bold my-2">Nearest <span className='text-primary'>Doctors</span></h2>
                     {loading ? renderSkeletons() : (
                         <div className="flex overflow-x-auto space-x-3 pb-4">
@@ -167,7 +203,7 @@ const MapComponent = () => {
                     )}
                 </div>
 
-                <div className="my-2 pb-5">
+                <div className="my-2">
                     <h2 className="text-xl font-bold my-2">Nearest <span className='text-primary'>Clinics</span></h2>
                     {loading ? renderSkeletons() : (
                         <div className="flex overflow-x-auto space-x-3 pb-4">
@@ -209,35 +245,6 @@ const MapComponent = () => {
 
                     )}
                 </div>
-
-                {loading ? (
-                    <Skeleton className="w-full" />
-                ) : (position && (
-                    <MapContainer center={position} zoom={15} className="h-1/2 -z-50 rounded-lg shadow-lg">
-                        <TileLayer
-                            url={`https://api.maptiler.com/maps/streets-v2/256/{z}/{x}/{y}.png?key=${import.meta.env.VITE_MAP_KEY}`}
-                        />
-                        <Marker position={position} icon={redIcon}>
-                            <Popup>Your Current Location</Popup>
-                        </Marker>
-
-                        {hospitals.map((place, index) => (
-                            <Marker key={index} position={[place.lat, place.lon]} icon={greenIcon}>
-                                <Popup>{place.display_name}</Popup>
-                            </Marker>
-                        ))}
-                        {pharmacy.map((place, index) => (
-                            <Marker key={index} position={[place.lat, place.lon]} icon={greenIcon}>
-                                <Popup>{place.display_name}</Popup>
-                            </Marker>
-                        ))}
-                        {clinics.map((place, index) => (
-                            <Marker key={index} position={[place.lat, place.lon]} icon={greenIcon}>
-                                <Popup>{place.display_name}</Popup>
-                            </Marker>
-                        ))}
-                    </MapContainer>
-                ))}
             </div>
         </div>
     );

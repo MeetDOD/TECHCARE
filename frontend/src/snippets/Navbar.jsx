@@ -41,7 +41,7 @@ const Navbar = () => {
 
     return (
         <div className='flex items-center justify-between text-sm py-4 mb-5 border-b border-b-gray-400'>
-            <img src={logo} className='w-40 -my-16 -ml-6 cursor-pointer' alt='TECHCARE' onClick={() => navigate("/")} />
+            <img src={logo} className='w-28 cursor-pointer' alt='TECHCARE' onClick={() => navigate("/")} />
             <ul className='hidden md:flex items-start gap-5 font-medium'>
                 <NavLink to="/">
                     <li className='py-1 hover:bg-primary  hover:text-white px-2 rounded-md hover:-translate-y-1 transition duration-300'>Home</li>
@@ -66,16 +66,16 @@ const Navbar = () => {
                 <Button size="icon" variant="ghost" className="border" onClick={toggleTheme} style={{
                     borderColor: `var(--borderColor)`,
                 }}>
-                    {theme === "dark" ? <BsFillMoonStarsFill className="h-4 w-4" /> : <BsFillSunFill className="h-4 w-4" />}
+                    {theme === "dark" ? <BsFillMoonStarsFill className="h-5 w-5" /> : <BsFillSunFill className="h-4 w-4" />}
                 </Button>
                 {isLoggedIn ?
                     <div className='flex items-center gap-2 cursor-pointer group relative'>
                         {user ?
-                            <img className='w-8 h-8 rounded-full border object-cover"' src={user.photo} alt={user.firstName} style={{
+                            <img className='w-10 h-10 rounded-full border object-cover"' src={user.photo} alt={user.firstName} style={{
                                 borderColor: `var(--borderColor)`,
                             }} />
                             :
-                            <img className='w-8 h-8 rounded-full border object-cover"' src={doctor.photo} alt={doctor.firstName} style={{
+                            <img className='w-10 h-10 rounded-full border object-cover"' src={doctor.photo} alt={doctor.firstName} style={{
                                 borderColor: `var(--borderColor)`,
                             }} />
                         }
@@ -103,7 +103,7 @@ const Navbar = () => {
                 >
                     <div className='flex items-center justify-between px-5 py-6'>
                         <Link to='/'>
-                            <img src={logo} onClick={() => setShowMenu(false)} className='w-40 -my-16 -ml-6 cursor-pointer' alt='TECHCARE' />
+                            <img src={logo} onClick={() => setShowMenu(false)} className='w-28 cursor-pointer' alt='TECHCARE' />
                         </Link>
                         <button className='w-7' onClick={() => setShowMenu(false)}><IoIosCloseCircleOutline size={25} /></button>
                     </div>

@@ -15,12 +15,13 @@ const Doctors = () => {
                 setdoctorlist(res.data.doctors);
             }
         }
+
         fetchDoctors();
     }, []);
 
     return (
         <div>
-            <div className='flex flex-col items-center gap-5 my-20 px-4'>
+            <div className='flex flex-col items-center gap-5 my-12 px-4'>
                 <h1 className='text-2xl md:text-3xl font-bold text-center'>
                     Popular <span className='text-primary'>Doctors</span>
                 </h1>
@@ -30,7 +31,7 @@ const Doctors = () => {
             </div>
             <div className='grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-7'>
                 {doctorList?.map((item, index) => (
-                    <Link to={`/doctordetail/${item._id}`} onClick={() => scrollTo(0, 0)} key={index} className='border-[1px] rounded-md p-3 shadow-lg transition duration-300 hover:-translate-y-2' style={{
+                    <Link to={`/doctordetail/${item._id}`} onClick={() => scrollTo(0, 0)} key={index} className='flex flex-col justify-between border-[1px] rounded-md p-3 shadow-lg transition duration-300 hover:-translate-y-2' style={{
                         borderColor: `var(--borderColor)`,
                     }}>
                         <img className='h-[200px] w-full object-cover rounded-lg' src={item.profilePhoto} alt={item.firstName} width={500} height={200} />

@@ -14,6 +14,8 @@ import { loggedInState, userState } from "./store/atoms/userauth";
 import ProtectedRoute from "./store/ProtectedRoute";
 import DoctorLogin from "./pages/DoctorLogin";
 import DoctorRegister from "./pages/DoctorRegister";
+import Footer from "./home/Footer";
+import AboutUs from "./pages/AboutUs";
 
 function App() {
 
@@ -28,6 +30,7 @@ function App() {
           <>
             <Route path="/" element={<Home />} />
             <Route path="/doctors" element={<Doctors />} />
+            <Route path="/about" element={<AboutUs />} />
             <Route path="/doctordetail/:id" element={<DoctorDetail />} />
 
             <Route path="/map" element={
@@ -60,6 +63,7 @@ function App() {
         </Routes>
         <Toaster richColors />
       </div>
+      <Footer />
     </BrowserRouter>
   )
 }

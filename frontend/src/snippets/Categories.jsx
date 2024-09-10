@@ -6,6 +6,18 @@ import cat3 from "../assets/categories/cat3.png"
 import cat4 from "../assets/categories/cat4.png"
 import cat5 from "../assets/categories/cat5.png"
 import cat6 from "../assets/categories/cat6.png"
+import ChatBot from 'react-simple-chatbot';
+import { ThemeProvider } from 'styled-components';
+
+const theme = {
+    background: '#f5f8fb',
+    headerBgColor: '#356DE8',
+    headerFontColor: '#fff',
+    botBubbleColor: '#356DE8',
+    botFontColor: '#fff',
+    userBubbleColor: '#fff',
+    userFontColor: '#356DE8',
+};
 
 const special = [
     {
@@ -37,6 +49,28 @@ const special = [
 const Categories = () => {
     return (
         <div className='flex flex-col items-center gap-5 py-16 px-4'>
+            <ThemeProvider theme={theme}>
+                <ChatBot className="text-black bg-primary"
+                    steps={[
+                        {
+                            id: '1',
+                            message: 'What is your name?',
+                            trigger: '2',
+                        },
+                        {
+                            id: '2',
+                            user: true,
+                            trigger: '3',
+                        },
+                        {
+                            id: '3',
+                            message: 'Hi {previousValue}, nice to meet you!',
+                            end: true,
+                        },
+                    ]}
+                    floating={true}
+                />
+            </ThemeProvider>
             <h1 className='text-2xl md:text-3xl font-bold text-center'>
                 Find by <span className='text-primary'>Doctors Speciality</span>
             </h1>
