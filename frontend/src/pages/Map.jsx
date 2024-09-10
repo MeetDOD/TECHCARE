@@ -24,7 +24,7 @@ const greenIcon = new L.Icon({
 const MapComponent = () => {
     const [position, setPosition] = useState(null);
     const [hospitals, setHospitals] = useState([]);
-    const [pharmacy, setpharmacy] = useState([]);
+    const [pharmacy, setPharmacy] = useState([]);
     const [clinics, setClinics] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -38,7 +38,7 @@ const MapComponent = () => {
 
     const fetchNearbyPlaces = async (query, setPlaces) => {
         const bbox = `${position[1] - 0.05},${position[0] - 0.05},${position[1] + 0.05},${position[0] + 0.05}`;
-        const url = `https://nominatim.openstreetmap.org/search?q=${query}&format=json&limit=10&viewbox=${bbox}&bounded=1`;
+        const url = `https://nominatim.openstreetmap.org/search?q=${query}&format=json&limit=5&viewbox=${bbox}&bounded=1`;
 
         try {
             const response = await axios.get(url);
@@ -53,14 +53,26 @@ const MapComponent = () => {
     useEffect(() => {
         if (position) {
             fetchNearbyPlaces('Hospital', setHospitals);
-            fetchNearbyPlaces('Pharmacy', setpharmacy);
+            fetchNearbyPlaces('Pharmacy', setPharmacy);
             fetchNearbyPlaces('Clinic', setClinics);
         }
     }, [position]);
 
+    const getGoogleMapsDirectionsUrl = (currentLat, currentLon, placeLat, placeLon) => {
+        return `https://www.google.com/maps/dir/?api=1&origin=${currentLat},${currentLon}&destination=${placeLat},${placeLon}&travelmode=walking`;
+    };
+
+    const getGoogleStreetViewUrl = (lat, lon) => {
+        return `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${lat},${lon}`;
+    };
+
+    const getGoogleStaticMapImage = (lat, lon) => {
+        return `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}&zoom=15&size=300x200&maptype=roadmap&markers=color:red%7Clabel:P%7C${lat},${lon}`;
+    };
+
     const renderSkeletons = () => (
         <div className="flex overflow-x-auto space-x-3 pb-4">
-            {[...Array(10)].map((_, index) => (
+            {[...Array(5)].map((_, index) => (
                 <Skeleton key={index} className="min-w-[300px] h-[150px] p-2" />
             ))}
         </div>
@@ -69,7 +81,6 @@ const MapComponent = () => {
     return (
         <div>
             <div className="relative h-screen w-full rounded-lg">
-
                 <div className="my-2 pb-5">
                     <h2 className="text-xl font-bold my-2">Nearest <span className='text-primary'>Hospitals</span></h2>
                     {loading ? renderSkeletons() : (
@@ -79,8 +90,38 @@ const MapComponent = () => {
                                     borderColor: `var(--borderColor)`,
                                 }}>
                                     <h2 className='text-[10px] p-1 bg-blue-100 rounded-full px-2 text-primary w-fit'>{place.name}</h2>
-                                    <h3 className="font-bold opacity-95 text-sm my-3">{place.display_name}</h3>
-                                    <p className="text-xs opacity-90">Lat: {place.lat}, Lon: {place.lon}</p>
+                                    <h3 className="font-semibold opacity-95 text-sm my-3">{place.display_name}</h3>
+                                    {/* <p className="text-xs opacity-90">Lat: {place.lat}, Lon: {place.lon}</p> */}
+
+                                    {/* <img
+                                        src={getGoogleStaticMapImage(place.lat, place.lon)}
+                                        alt={place.display_name}
+                                        className="w-full h-[150px] my-2"
+                                    /> */}
+
+                                    <div className='flex items-center gap-2 justify-center '>
+                                        <a
+                                            href={getGoogleMapsDirectionsUrl(position[0], position[1], place.lat, place.lon)}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-xs p-2 text-white border rounded-md bg-primary hover:bg-primary/90" style={{
+                                                borderColor: `var(--borderColor)`,
+                                            }}
+                                        >
+                                            Get Walking Directions
+                                        </a>
+
+                                        <a
+                                            href={getGoogleStreetViewUrl(place.lat, place.lon)}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-xs p-2 border rounded-md hover:opacity-80" style={{
+                                                borderColor: `var(--borderColor)`,
+                                            }}
+                                        >
+                                            View in Street View
+                                        </a>
+                                    </div>
                                 </div>
                             ))}
                         </div>
@@ -98,6 +139,29 @@ const MapComponent = () => {
                                     <h2 className='text-[10px] p-1 bg-blue-100 rounded-full px-2 text-primary w-fit'>{place.name}</h2>
                                     <h3 className="font-bold opacity-95 text-sm my-3">{place.display_name}</h3>
                                     <p className="text-xs opacity-90">Lat: {place.lat}, Lon: {place.lon}</p>
+                                    <div className='flex items-center gap-2 justify-center '>
+                                        <a
+                                            href={getGoogleMapsDirectionsUrl(position[0], position[1], place.lat, place.lon)}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-xs p-2 text-white border rounded-md bg-primary hover:bg-primary/90" style={{
+                                                borderColor: `var(--borderColor)`,
+                                            }}
+                                        >
+                                            Get Walking Directions
+                                        </a>
+
+                                        <a
+                                            href={getGoogleStreetViewUrl(place.lat, place.lon)}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-xs p-2 border rounded-md hover:opacity-80" style={{
+                                                borderColor: `var(--borderColor)`,
+                                            }}
+                                        >
+                                            View in Street View
+                                        </a>
+                                    </div>
                                 </div>
                             ))}
                         </div>
@@ -115,6 +179,29 @@ const MapComponent = () => {
                                     <h2 className='text-[10px] p-1 bg-blue-100 rounded-full px-2 text-primary w-fit'>{place.name}</h2>
                                     <h3 className="font-bold opacity-95 text-sm my-3">{place.display_name}</h3>
                                     <p className="text-xs opacity-90">Lat: {place.lat}, Lon: {place.lon}</p>
+                                    <div className='flex items-center gap-2 justify-center '>
+                                        <a
+                                            href={getGoogleMapsDirectionsUrl(position[0], position[1], place.lat, place.lon)}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-xs p-2 text-white border rounded-md bg-primary hover:bg-primary/90" style={{
+                                                borderColor: `var(--borderColor)`,
+                                            }}
+                                        >
+                                            Get Walking Directions
+                                        </a>
+
+                                        <a
+                                            href={getGoogleStreetViewUrl(place.lat, place.lon)}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-xs p-2 border rounded-md hover:opacity-80" style={{
+                                                borderColor: `var(--borderColor)`,
+                                            }}
+                                        >
+                                            View in Street View
+                                        </a>
+                                    </div>
                                 </div>
                             ))}
                         </div>
@@ -122,7 +209,7 @@ const MapComponent = () => {
                 </div>
 
                 {loading ? (
-                    <Skeleton className="w-full my-4" />
+                    <Skeleton className="w-full mt-52" />
                 ) : (position && (
                     <MapContainer center={position} zoom={15} className="w-full h-3/4 rounded-lg shadow-lg">
                         <TileLayer
