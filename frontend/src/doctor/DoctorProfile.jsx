@@ -69,11 +69,10 @@ const DoctorProfile = () => {
     const handleAddAchievement = () => {
         if (achievementInput.trim()) {
             setmedicalAchievements([...medicalAchievements, achievementInput.trim()]);
-            setAchievementInput(""); // Reset input field
+            setAchievementInput("");
         }
     };
 
-    // Remove an achievement
     const handleRemoveAchievement = (indexToRemove) => {
         const updatedAchievements = medicalAchievements.filter((_, index) => index !== indexToRemove);
         setmedicalAchievements(updatedAchievements);
@@ -126,7 +125,7 @@ const DoctorProfile = () => {
 
     return (
         <div>
-            <form className='mb-5'>
+            <form className='mb-5 h-[500px]'>
                 <div className='flex flex-col gap-3 m-auto items-start justify-center p-8 min-w-[340px] sm:min-w-96 rounded-xl shadow-md border' style={{
                     borderColor: `var(--borderColor)`,
                 }}>

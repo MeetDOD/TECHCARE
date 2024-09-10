@@ -122,3 +122,8 @@ html {
   background-color: #2563eb;
   border-radius: 20px;
 }
+
+*::selection {
+  color: white;
+  background-color: #2563eb;
+}

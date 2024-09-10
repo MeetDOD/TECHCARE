@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button';
 import React from 'react';
 import { FaArrowRight } from 'react-icons/fa';
 import doc1 from '../assets/Hero/doc1.png';
+import { Link } from 'react-router-dom';
 
 const Hero = () => {
     return (
@@ -37,10 +38,12 @@ const Hero = () => {
                         </div>
 
                         <div className="pt-10 flex flex-col gap-5 sm:flex-row">
-                            <Button className="px-8 py-6 shadow-md">Download Now</Button>
-                            <Button variant="ghost" className="px-8 py-6 border shadow-sm">
-                                Read Docs
-                            </Button>
+                            <Link to="/doctors"><Button className="px-8 py-6 shadow-md">Book Now</Button></Link>
+                            <Link to="/doctors">
+                                <Button variant="ghost" className="px-8 py-6 border shadow-sm">
+                                    View Doctors
+                                </Button>
+                            </Link>
                         </div>
                     </div>
 

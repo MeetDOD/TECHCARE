@@ -25,7 +25,7 @@ const Footer = () => {
                     <ul className="flex list-none p-0 gap-2">
                         {socialLinks.map((link) => (
                             <li key={link.id} className="hover:-translate-y-1 transition-transform duration-300 hover:text-primary">
-                                <a href={link.url} target="_blank" rel="noopener noreferrer" className="text-2xl">
+                                <a href={link.url} target="_blank" className="text-2xl">
                                     <link.icon />
                                 </a>
                             </li>

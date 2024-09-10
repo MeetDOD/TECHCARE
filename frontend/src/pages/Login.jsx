@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from '@/components/ui/button';
@@ -48,6 +48,10 @@ const Login = () => {
             toast.error('Invalid email or password');
         }
     };
+
+    useEffect(() => {
+        window.scrollTo(0, 0)
+    }, []);
 
     return (
         <form className='min-h-[80vh] flex items-center' onSubmit={handleLogin}>

@@ -75,7 +75,7 @@ const UserProfile = () => {
 
     return (
         <div>
-            <form className='mb-5'>
+            <form className='mb-5 h-[500px]'>
                 <div className='flex flex-col gap-3 m-auto items-start justify-center p-8 min-w-[340px] sm:min-w-96 rounded-xl shadow-md border' style={{
                     borderColor: `var(--borderColor)`,
                 }}>

@@ -46,6 +46,10 @@ const DoctorLogin = () => {
         }
     };
 
+    useEffect(() => {
+        window.scrollTo(0, 0)
+    }, []);
+
     return (
         <form className='min-h-[80vh] flex items-center' onSubmit={handleLogin}>
             <div className='flex flex-col gap-3 m-auto items-start p-8 min-w-[340px] sm:min-w-96 rounded-xl text-sm shadow-md border' style={{

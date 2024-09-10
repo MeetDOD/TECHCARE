@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 
 const UserAppoinments = () => {
     return (
-        <div>
+        <div className=''>
             <p className='font-semibold text-lg'>My Appoinments</p>
             <div className='my-5 grid grid-cols-[1fr_2fr] gap-4 sm:flex sm:gap-6 py-2 border px-2 rounded-lg' style={{
                 borderColor: `var(--borderColor)`,

@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import meet from "../assets/team/meet.png"
 import kashish from "../assets/team/kashish.png"
 import ramesh from "../assets/team/ramesh.png"
 import about from "../assets/team/about.png"
 
 const AboutUs = () => {
+    useEffect(() => {
+        window.scrollTo(0, 0)
+    }, []);
     return (
         <div className="2xl:container lg:py-16  md:py-12 py-9 ">
             <div className="flex flex-col lg:flex-row justify-between gap-8">
