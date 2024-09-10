@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { MdVerified } from "react-icons/md";
+import { MdVerified, MdBadge } from "react-icons/md";
 import { Button } from '@/components/ui/button';
 import { Calendar } from "@/components/ui/calendar";
 import { FaBookMedical } from "react-icons/fa6";
@@ -45,10 +45,6 @@ const DoctorDetail = () => {
         "4:00 PM", "5:00 PM", "6:00 PM", "7:00 PM", "8:00 PM", "9:00 PM", "10:00 PM", "11:00 PM"
     ];
 
-    useEffect(() => {
-        window.scrollTo(0, 0)
-    }, []);
-
     return (
         <div className='overflow-hidden'>
             <div className='flex flex-col sm:flex-col md:flex-col lg:flex-row gap-4'>
@@ -70,34 +66,20 @@ const DoctorDetail = () => {
 
                     <p className='text-[15px] font-medium my-1 mt-2'>Language Spoken</p>
                     <div className='flex items-center mt-2 gap-2'>
-                        {doctorData.languageSpoken && doctorData.languageSpoken.length > 0 ? (
-                            JSON.parse(doctorData.languageSpoken[0]).map((language, index) => (
-                                <p
-                                    key={index}
-                                    className='py-0.5 px-2 border-2 text-xs w-fit rounded-full border-primary bg-primary/20'
-                                >
-                                    {language}
-                                </p>
-                            ))
-                        ) : (
-                            <p className='opacity-80 text-sm'>Data is not available</p>
-                        )}
+                        <p
+                            className='py-0.5 px-2 border-2 text-xs w-fit rounded-full border-primary bg-primary/20'
+                        >
+                            {doctorData.languageSpoken[0]}
+                        </p>
                     </div>
 
                     <p className='text-[15px] font-medium my-1 mt-2'>Medical Achievements</p>
                     <div className='flex md:flex-row mt-2 opacity-90 gap-2'>
-                        {doctorData.medicalAchievements && doctorData.medicalAchievements.length > 0 ? (
-                            JSON.parse(doctorData.medicalAchievements[0]).map((achi, index) => (
-                                <p
-                                    key={index}
-                                    className='py-0.5 px-2 border-2 text-sm w-fit rounded-lg border-yellow-400 bg-yellow-400/20'
-                                >
-                                    {achi}
-                                </p>
-                            ))
-                        ) : (
-                            <p className='opacity-80 text-sm'>Data is not available</p>
-                        )}
+                        <p
+                            className='py-0.5 px-2 border-2 text-sm w-fit rounded-lg border-yellow-400 bg-yellow-400/20'
+                        >
+                            {doctorData.medicalAchievements[0]}
+                        </p>
                     </div>
 
                     <p className='font-semibold text-lg mt-2 opacity-95'>

@@ -18,10 +18,15 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
+import { Progress } from "@/components/ui/progress"
+import axios from 'axios';
 
 const DoctorProfile = () => {
 
     const doctor = useRecoilValue(doctorState);
+
+    const doctorId = doctor._id;
+
     const setDoctor = useSetRecoilState(doctorState);
 
     const [profilePhoto, setprofilePhoto] = useState(null);
@@ -56,7 +61,7 @@ const DoctorProfile = () => {
 
     const handleAddLanguage = () => {
         if (languageSpoken.trim()) {
-            setLanguages([...languages, languageSpoken.trim()]);
+            setLanguages((prevLanguages) => [...prevLanguages, languageSpoken.trim()]);
             setLanguageSpoken("");
         }
     };
@@ -102,13 +107,12 @@ const DoctorProfile = () => {
         formData.append('hospital', hospital);
         formData.append('availableDay', availableDay);
         formData.append('certificate', certificate);
-        formData.append('languageSpoken', JSON.stringify(languages));
+        formData.append('languageSpoken', languages);
         formData.append('consultationFee', consultationFee);
-        formData.append('medicalAchievements', JSON.stringify(medicalAchievements));
+        formData.append('medicalAchievements', medicalAchievements);
 
         try {
             const response = await doctorupdateProfile(formData);
-            console.log(response);
             if (response.status === 200) {
                 toast.success("Profile updated successfully");
                 const updatedDoctor = response.data.Doctor;
@@ -119,12 +123,68 @@ const DoctorProfile = () => {
             }
         } catch (error) {
             toast.error("Please fill properly");
-            console.log(error);
         }
     };
 
+    const totalFields = 16;
+    const filledFields = [
+        profilePhoto,
+        firstName,
+        lastName,
+        contactNo,
+        gender,
+        datOfBirth,
+        residentialAddress,
+        hospitalAddress,
+        specialization,
+        experience,
+        hospital,
+        availableDay,
+        certificate,
+        consultationFee,
+        medicalAchievements.length > 0,
+        languages.length > 0
+    ].filter(Boolean).length;
+
+    const progressPercentage = (filledFields / totalFields) * 100;
+
+    useEffect(() => {
+        const fetchDoctorData = async () => {
+            try {
+                const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/doctor/getdrbyid/${doctorId}`);
+                const doctor = response.data.doctor;
+                setprofilePhoto(doctor.profilePhoto || "");
+                setfirstName(doctor.firstName || "");
+                setlastName(doctor.lastName || "");
+                setcontactNo(doctor.contactNo || "");
+                setgender(doctor.gender || "");
+                setdateofbirth(doctor.datOfBirth || "");
+                setresidentialAddress(doctor.residentialAddress || "");
+                sethospitalAddress(doctor.hospitalAddress || "");
+                setspecialization(doctor.specialization || "");
+                setexperience(doctor.experience || "");
+                sethospital(doctor.hospital || "");
+                setavailableDay(doctor.availableDay || "");
+                setcertificate(doctor.certificate || "");
+                setconsultationFee(doctor.consultationFee || "");
+                setmedicalAchievements(doctor.medicalAchievements || "");
+                setLanguages(doctor.languageSpoken || "");
+            } catch (error) {
+                console.error("Error fetching doctor details:", error);
+            }
+        };
+        if (doctorId) {
+            fetchDoctorData();
+        }
+    }, []);
+
+
     return (
         <div>
+            <div className="mb-4">
+                <p className='font-semibold text-lg opacity-95'>Profile completion: {Math.round(progressPercentage)}%</p>
+                <Progress value={progressPercentage} className="my-3" />
+            </div>
             <form className='mb-5 h-[500px]'>
                 <div className='flex flex-col gap-3 m-auto items-start justify-center p-8 min-w-[340px] sm:min-w-96 rounded-xl shadow-md border' style={{
                     borderColor: `var(--borderColor)`,
@@ -457,7 +517,6 @@ const DoctorProfile = () => {
                                                     </Button>
                                                 </div>
 
-                                                {/* Display added achievements */}
                                                 {medicalAchievements.length > 0 && (
                                                     <ul className="mt-4">
                                                         {medicalAchievements.map((achievement, index) => (
@@ -478,8 +537,6 @@ const DoctorProfile = () => {
                                                     </ul>
                                                 )}
                                             </div>
-
-
                                         </div>
                                         <DialogFooter className="flex flex-col">
                                             <DialogClose asChild>
