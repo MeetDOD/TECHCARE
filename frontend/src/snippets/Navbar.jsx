@@ -2,13 +2,14 @@ import { Button } from '@/components/ui/button'
 import { useTheme } from '@/components/ui/themeprovider';
 import { BsFillMoonStarsFill, BsFillSunFill } from "react-icons/bs";
 import React, { useState } from 'react'
-import { NavLink, useNavigate } from 'react-router-dom'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { MdOutlineArrowDropDown } from "react-icons/md";
 import { GiHamburgerMenu, GiCancel } from "react-icons/gi";
 import logo from "../assets/Hero/logo.png"
 import { useRecoilValue, useResetRecoilState } from 'recoil';
 import { doctorState, doctortokenState, loggedInState, tokenState, userState } from "../store/atoms/userauth";
 import { toast } from 'sonner';
+import { IoIosCloseCircleOutline } from "react-icons/io";
 
 const Navbar = () => {
 
@@ -101,14 +102,24 @@ const Navbar = () => {
                 }}
                 >
                     <div className='flex items-center justify-between px-5 py-6'>
-                        <img src={logo} className='w-40 -my-16 -ml-6 cursor-pointer' alt='TECHCARE' />
-                        <button className='w-7' onClick={() => setShowMenu(false)}><GiCancel size={25} /></button>
+                        <Link to='/'>
+                            <img src={logo} onClick={() => setShowMenu(false)} className='w-40 -my-16 -ml-6 cursor-pointer' alt='TECHCARE' />
+                        </Link>
+                        <button className='w-7' onClick={() => setShowMenu(false)}><IoIosCloseCircleOutline size={25} /></button>
                     </div>
                     <ul className='flex flex-col items-center gap-2 mt-5 px-5 text-lg font-medium'>
                         <NavLink to="/" onClick={() => setShowMenu(false)}><p className="px-4 py-2 rounded-md inline-block">Home</p></NavLink>
                         <NavLink to="/doctors" onClick={() => setShowMenu(false)}><p className="px-4 py-2 rounded-md inline-block">Doctors</p></NavLink>
                         <NavLink to="/about" onClick={() => setShowMenu(false)}><p className="px-4 py-2 rounded-md inline-block">About</p></NavLink>
                         <NavLink to="/contact" onClick={() => setShowMenu(false)}><p className="px-4 py-2 rounded-md inline-block">Contact</p></NavLink>
+                        {isLoggedIn &&
+                            <NavLink to="/map" onClick={() => setShowMenu(false)}><p className="px-4 py-2 rounded-md inline-block">Map</p></NavLink>
+                        }
+                        {!isLoggedIn &&
+                            <button onClick={() => { navigate("/login"), setShowMenu(false) }} className='bg-primary w-full hover:bg-primary/90 text-white px-6 rounded-md py-2 font-semibold '>
+                                Login/Signup
+                            </button>
+                        }
                     </ul>
                 </div>
             </div>

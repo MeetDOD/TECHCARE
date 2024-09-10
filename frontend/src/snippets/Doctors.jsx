@@ -11,7 +11,6 @@ const Doctors = () => {
     useEffect(() => {
         const fetchDoctors = async () => {
             const res = await getalldoctors();
-            console.log(res);
             if (res.status === 200) {
                 setdoctorlist(res.data.doctors);
             }
@@ -20,8 +19,8 @@ const Doctors = () => {
     }, []);
 
     return (
-        <div className='mb-10'>
-            <div className='flex flex-col items-center gap-5 py-7 px-4'>
+        <div>
+            <div className='flex flex-col items-center gap-5 my-20 px-4'>
                 <h1 className='text-2xl md:text-3xl font-bold text-center'>
                     Popular <span className='text-primary'>Doctors</span>
                 </h1>

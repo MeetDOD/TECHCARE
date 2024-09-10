@@ -3,6 +3,7 @@ import Hero from '../home/Hero';
 import Categories from '../snippets/Categories';
 import Doctors from '../snippets/Doctors';
 import React from 'react';
+import NewsAndFeeds from '@/home/NewsAndFeeds';
 
 const Home = () => {
     const { theme } = useTheme();
@@ -19,6 +20,7 @@ const Home = () => {
             <Hero />
             <Categories />
             <Doctors />
+            <NewsAndFeeds />
         </div>
     );
 };
