@@ -93,7 +93,7 @@ const NewsAndFeeds = () => {
                                 <div className="p-4 lg:p-6 transition-all duration-300 rounded-b-2xl">
                                     <span className="font-medium mb-3 block">{item.date.split(' ').slice(0, 4).join(' ')}</span>
                                     <h4 className="text-xl font-medium leading-8 mb-5">{item.title.slice(0, 50)}...</h4>
-                                    <p className="leading-6 mb-10">{item.short_description.slice(0, 50)}</p>
+                                    <p className="mb-10">{item.text.slice(0, 200)}...</p>
                                     <a target='_blank' href={item.url} className="flex gap-2 items-center hover:-translate-y-1 transition group">
                                         <p className="cursor-pointer text-lg text-primary font-semibold">Read More</p>
                                         <FaArrowRight size={20} className="text-primary group-hover:translate-x-1 transition duration-300" />
