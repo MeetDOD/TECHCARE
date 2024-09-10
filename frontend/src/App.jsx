@@ -17,6 +17,7 @@ import DoctorRegister from "./pages/DoctorRegister";
 import Footer from "./home/Footer";
 import AboutUs from "./pages/AboutUs";
 import ContactUs from "./pages/ContactUs";
+import GoogleTranslate from "./snippets/GoogleTranslate";
 
 function App() {
 
@@ -27,6 +28,9 @@ function App() {
     <BrowserRouter>
       <div className="mx-4 sm:mx-[10%]">
         <Navbar />
+        <div className="">
+          <GoogleTranslate />
+        </div>
         <Routes>
           <>
             <Route path="/" element={<Home />} />
