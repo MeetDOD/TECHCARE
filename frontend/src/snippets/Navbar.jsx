@@ -5,7 +5,7 @@ import React, { useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { MdOutlineArrowDropDown } from "react-icons/md";
 import { GiHamburgerMenu, GiCancel } from "react-icons/gi";
-import logo from "../assets/hero/logo.png"
+import logo from "../assets/Hero/logo.png"
 import { useRecoilValue, useResetRecoilState } from 'recoil';
 import { doctorState, doctortokenState, loggedInState, tokenState, userState } from "../store/atoms/userauth";
 import { toast } from 'sonner';
