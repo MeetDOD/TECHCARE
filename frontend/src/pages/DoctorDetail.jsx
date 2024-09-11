@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { MdVerified, MdBadge } from "react-icons/md";
+import { MdVerified } from "react-icons/md";
 import { Button } from '@/components/ui/button';
 import { Calendar } from "@/components/ui/calendar";
 import { FaBookMedical } from "react-icons/fa6";
 import {
     Dialog,
+    DialogClose,
     DialogContent,
     DialogHeader,
     DialogTitle,
@@ -13,19 +14,29 @@ import {
 } from "@/components/ui/dialog";
 import RelatedDoctor from '@/snippets/RelatedDoctor';
 import axios from 'axios';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { loggedInState, userState } from '@/store/atoms/userauth';
+import { toast } from 'sonner';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
 
 const DoctorDetail = () => {
 
     const { id } = useParams();
     const [doctorData, setDoctorData] = useState(null);
     const [selectedDate, setSelectedDate] = useState(null);
+    const [selectedTime, setSelectedTime] = useState(null);
+    const [description, setdescription] = useState("")
+    const user = useRecoilState(userState);
+
+    const isLoggedIn = useRecoilValue(loggedInState);
+
 
     useEffect(() => {
         const fetchDoctorData = async () => {
             try {
                 const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/doctor/getdrbyid/${id}`);
                 setDoctorData(response.data.doctor);
-                console.log(response.data.doctor)
             } catch (error) {
                 console.error("Error fetching doctor details:", error);
             }
@@ -35,6 +46,33 @@ const DoctorDetail = () => {
             fetchDoctorData();
         }
     }, [id]);
+
+    const handleSubmit = async () => {
+        try {
+            const appointmentData = {
+                doctorId: id,
+                patientId: user[0]._id,
+                date: selectedDate,
+                time: selectedTime,
+                patientName: `${user[0].firstName} ${user[0].lastName}`,
+                description: description,
+                patientEmail: user[0].email,
+                doctorEmail: doctorData.email,
+                doctorName: `${doctorData.firstName} ${doctorData.lastName}`,
+                doctorPhoto: doctorData.profilePhoto,
+                patientPhoto: user[0].photo
+            };
+
+            const headers = {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+            };
+
+            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/appointment/bookappointment`, appointmentData, { headers });
+            toast.success(response.data.message);
+        } catch (error) {
+            toast.error("Error in booking appoinment");
+        }
+    }
 
     if (!doctorData) {
         return <div>Loading...</div>;
@@ -91,13 +129,18 @@ const DoctorDetail = () => {
             <div className='flex justify-center my-10'>
                 <Dialog>
                     <DialogTrigger asChild>
-                        <Button className="rounded-full py-6 px-12 text-lg font-semibold hover:-translate-y-1.5 transition duration-200">
-                            Book Appointment
-                        </Button>
+                        {isLoggedIn ?
+                            <Button className="rounded-full py-6 px-12 text-lg font-semibold hover:-translate-y-1.5 transition duration-200">
+                                Book Appointment
+                            </Button>
+                            :
+                            <Button className="rounded-full py-6 px-12 text-lg font-semibold hover:-translate-y-1.5 transition duration-200" disabled>
+                                Book Appoinment
+                            </Button>
+                        }
                     </DialogTrigger>
-                    <DialogContent className="sm:max-w-xl w-full mx-auto rounded-lg p-5 " style={{
-                        backgroundColor: `var(--background-color)`, color: `var(--text-color)`, borderColor: `var(--borderColor)`
-                    }}>
+                    <DialogContent className="sm:max-w-xl w-full mx-auto rounded-lg p-5 overflow-y-scroll max-h-[90vh]"
+                        style={{ backgroundColor: `var(--background-color)`, color: `var(--text-color)`, borderColor: `var(--borderColor)` }}>
                         <DialogHeader>
                             <DialogTitle className="py-3 font-semibold flex gap-1.5">
                                 <FaBookMedical size={20} />Book Appointment
@@ -105,28 +148,50 @@ const DoctorDetail = () => {
                         </DialogHeader>
                         <div className="flex flex-col sm:flex-col md:flex-col lg:flex-row gap-6">
                             <div className='w-full lg:w-1/2 flex justify-center'>
-                                <Calendar value={selectedDate} onChange={setSelectedDate} />
+                                <Calendar
+                                    selected={selectedDate}
+                                    onSelect={setSelectedDate}
+                                    mode="single"
+                                    initialFocus
+                                />
                             </div>
 
                             <div className='w-full lg:w-1/2'>
                                 <p className='font-semibold mb-4'>Select a Time Slot</p>
                                 <div className="grid grid-cols-3 gap-3">
                                     {timeSlots.map((time, index) => (
-                                        <Button key={index} variant="secondary" className='py-2'>
+                                        <Button
+                                            key={index}
+                                            variant={selectedTime === time ? "" : "secondary"}
+                                            onClick={() => setSelectedTime(time)}
+                                            className='py-2'
+                                        >
                                             {time}
                                         </Button>
                                     ))}
                                 </div>
                             </div>
                         </div>
-                        <div className='flex justify-center'>
-                            <Button className="my-4 py-5 text-[16px] w-fit hover:-translate-y-1.5 transition duration-200" type="submit">
+
+                        <Label>Description</Label>
+                        <div className='w-full flex justify-center'>
+                            <Textarea value={description} onChange={(e) => setdescription(e.target.value)} placeholder="Write a description about booking this appointment..." required />
+                        </div>
+
+                        <div className='flex sm:flex-row flex-col justify-center items-center gap-2 gap-y-3'>
+                            <Button onClick={handleSubmit} className="py-5 text-[16px] w-full" type="submit">
                                 Confirm Appointment
                             </Button>
+                            <DialogClose asChild>
+                                <Button type="button" variant="secondary" className=" py-5 text-[16px] w-full">
+                                    Close
+                                </Button>
+                            </DialogClose>
                         </div>
                     </DialogContent>
                 </Dialog>
             </div>
+
 
             <RelatedDoctor />
         </div>

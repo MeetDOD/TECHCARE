@@ -29,12 +29,10 @@ const Navbar = () => {
         localStorage.removeItem("user");
         localStorage.removeItem("doctortoken");
         localStorage.removeItem("doctor");
-
         resetToken();
         resetUser();
         resetDoctorToken();
         resetDoctor();
-
         toast.success("Logged out successfully");
         navigate("/login");
     };

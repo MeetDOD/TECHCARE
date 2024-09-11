@@ -33,14 +33,11 @@ const Login = () => {
             const res = await userlogin({ email, password });
             if (res.status === 200 && res.data.token) {
                 toast.success('Login successful');
-
                 localStorage.setItem('token', res.data.token);
                 localStorage.setItem('user', JSON.stringify(res.data.user));
-
                 setToken(res.data.token);
                 setUser(res.data.user);
-
-                navigate('/');
+                navigate('/patientprofile');
             } else if (res.data.message) {
                 toast.error(res.data.message);
             }

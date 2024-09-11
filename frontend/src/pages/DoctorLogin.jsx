@@ -37,7 +37,7 @@ const DoctorLogin = () => {
                 localStorage.setItem('doctor', JSON.stringify(res.data.Doctor));
                 setDoctorToken(res.data.token);
                 setDoctor(res.data.Doctor);
-                navigate('/');
+                navigate('/doctorprofile');
             } else if (res.data.message) {
                 toast.error(res.data.message);
             }
