@@ -38,12 +38,12 @@ const DoctorDetail = () => {
                 const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/doctor/getdrbyid/${id}`);
                 setDoctorData(response.data.doctor);
                 setloading(false);
+                document.title = `TECHCARE | ${response.data.doctor.firstName.toUpperCase()} ${response.data.doctor.lastName.toUpperCase()} DETAILS`;
             } catch (error) {
                 setloading(true);
                 console.error("Error fetching doctor details:", error);
             }
         };
-
         if (id) {
             fetchDoctorData();
         }

@@ -57,6 +57,7 @@ const DoctorProfile = () => {
             setfirstName(doctor.firstName);
             setlastName(doctor.lastName);
         }
+        document.title = `TECHCARE | ${doctor.firstName.toUpperCase()}'s PROFILE`;
     }, [doctor]);
 
     const handleAddLanguage = () => {

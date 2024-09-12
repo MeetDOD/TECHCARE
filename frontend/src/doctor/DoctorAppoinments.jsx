@@ -17,6 +17,7 @@ const DoctorAppoinments = () => {
             const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/appointment/getdoctorappointment`, { headers });
             setdoctorAppoinments(res.data.data);
             setLoading(false);
+            document.title = `TECHCARE | PATIENT APPOINMENTS`;
         } catch (error) {
             console.log(error);
         }

@@ -47,7 +47,8 @@ const DoctorLogin = () => {
     };
 
     useEffect(() => {
-        window.scrollTo(0, 0)
+        window.scrollTo(0, 0);
+        document.title = "TECHCARE | DOCTOR LOGIN";
     }, []);
 
     return (

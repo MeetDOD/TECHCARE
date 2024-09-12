@@ -69,7 +69,8 @@ const DoctorRegister = () => {
     };
 
     useEffect(() => {
-        window.scrollTo(0, 0)
+        window.scrollTo(0, 0);
+        document.title = "TECHCARE | DOCTOR REGISTER";
     }, []);
 
     return (

@@ -36,6 +36,7 @@ const UserProfile = () => {
             setfirstName(user.firstName);
             setlastName(user.lastName);
         }
+        document.title = `TECHCARE | ${user.firstName.toUpperCase()}'s PROFILE`;
     }, [user]);
 
     const handlePhotoChange = (e) => {

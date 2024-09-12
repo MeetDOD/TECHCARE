@@ -34,6 +34,8 @@ const MapComponent = () => {
             (err) => console.error(err),
             { enableHighAccuracy: true }
         );
+        document.title = "TECHCARE | MAP";
+
     }, []);
 
     const fetchNearbyPlaces = async (query, setPlaces) => {
