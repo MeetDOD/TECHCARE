@@ -6,7 +6,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 const NewsAndFeeds = () => {
     const [news, setNews] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
 
     useEffect(() => {
         const fetchNews = async () => {
@@ -42,33 +41,13 @@ const NewsAndFeeds = () => {
                     localStorage.setItem('lastFetch', now);
                     setLoading(false);
                 } catch (error) {
-                    setError(error.message);
-                    setLoading(false);
+                    setLoading(true);
                 }
             }
         };
 
         fetchNews();
     }, []);
-
-    if (loading) {
-        return (
-            <div className="my-32 flex justify-center gap-y-8 lg:gap-y-0 flex-wrap md:flex-wrap lg:flex-nowrap lg:flex-row lg:justify-between lg:gap-x-8">
-                {[...Array(3)].map((_, index) => (
-                    <div key={index} className="w-full max-lg:max-w-xl lg:w-1/3 border shadow-lg rounded-2xl" style={{
-                        borderColor: `var(--borderColor)`,
-                    }}>
-                        <Skeleton className="h-48 w-full rounded-t-2xl" />
-                        <Skeleton className="h-12 w-3/4 m-4" />
-                        <Skeleton className="h-6 w-1/2 m-4" />
-                        <Skeleton className="h-24 w-full m-4" />
-                    </div>
-                ))}
-            </div>
-        );
-    }
-
-    if (error) return <p>Error: {error}</p>;
 
     return (
         <div>
@@ -83,24 +62,38 @@ const NewsAndFeeds = () => {
             <section>
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 my-10">
                     <div className="flex justify-center gap-y-8 lg:gap-y-0 flex-wrap md:flex-wrap lg:flex-nowrap lg:flex-row lg:justify-between lg:gap-x-8">
-                        {news.slice(0, 3).map((item, index) => (
-                            <div key={index} className="w-full max-lg:max-w-xl lg:w-1/3 border shadow-lg rounded-2xl" style={{
-                                borderColor: `var(--borderColor)`,
-                            }}>
-                                <div className="flex items-center">
-                                    <img src={item.top_image} alt={item.title} className="rounded-t-2xl w-full h-48 object-cover" />
+                        {loading ? (
+                            Array.from({ length: 3 }).map((index) => (
+                                <div key={index} className="w-full max-lg:max-w-xl lg:w-1/3 border shadow-lg rounded-2xl" style={{ borderColor: `var(--borderColor)` }}>
+                                    <Skeleton className="w-full h-48 rounded-t-2xl" />
+                                    <div className="p-4 lg:p-6 transition-all duration-300 rounded-b-2xl">
+                                        <Skeleton className="h-6 w-32 mb-3" />
+                                        <Skeleton className="h-16 w-full mb-5" />
+                                        <Skeleton className="h-16 w-full mb-5" />
+                                        <Skeleton className="h-6 w-24" />
+                                    </div>
                                 </div>
-                                <div className="p-4 lg:p-6 transition-all duration-300 rounded-b-2xl">
-                                    <span className="font-medium mb-3 block">{item.date.split(' ').slice(0, 4).join(' ')}</span>
-                                    <h4 className="text-xl font-medium leading-8 mb-5">{item.title.slice(0, 50)}...</h4>
-                                    <p className="mb-10">{item.text.slice(0, 200)}...</p>
-                                    <a target='_blank' href={item.url} className="flex gap-2 items-center hover:-translate-y-1 transition group">
-                                        <p className="cursor-pointer text-lg text-primary font-semibold">Read More</p>
-                                        <FaArrowRight size={20} className="text-primary group-hover:translate-x-1 transition duration-300" />
-                                    </a>
+                            ))
+                        ) : (
+                            news.slice(0, 3).map((item, index) => (
+                                <div key={index} className="w-full max-lg:max-w-xl lg:w-1/3 border shadow-lg rounded-2xl" style={{
+                                    borderColor: `var(--borderColor)`,
+                                }}>
+                                    <div className="flex items-center">
+                                        <img src={item.top_image} alt={item.title} className="rounded-t-2xl w-full h-48 object-cover" />
+                                    </div>
+                                    <div className="p-4 lg:p-6 transition-all duration-300 rounded-b-2xl">
+                                        <span className="font-medium mb-3 block">{item.date.split(' ').slice(0, 4).join(' ')}</span>
+                                        <h4 className="text-xl font-medium leading-8 mb-5">{item.title.slice(0, 50)}...</h4>
+                                        <p className="mb-10">{item.text.slice(0, 200)}...</p>
+                                        <a target='_blank' href={item.url} className="flex gap-2 items-center hover:-translate-y-1 transition group">
+                                            <p className="cursor-pointer text-lg text-primary font-semibold">Read More</p>
+                                            <FaArrowRight size={20} className="text-primary group-hover:translate-x-1 transition duration-300" />
+                                        </a>
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
+                            ))
+                        )}
                     </div>
                 </div>
             </section>

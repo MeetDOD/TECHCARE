@@ -4,7 +4,7 @@ import { BsFillMoonStarsFill, BsFillSunFill } from "react-icons/bs";
 import React, { useState } from 'react'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { MdOutlineArrowDropDown } from "react-icons/md";
-import { GiHamburgerMenu, GiCancel } from "react-icons/gi";
+import { GiHamburgerMenu } from "react-icons/gi";
 import logo from "../assets/Hero/logo.png"
 import { useRecoilValue, useResetRecoilState } from 'recoil';
 import { doctorState, doctortokenState, loggedInState, tokenState, userState } from "../store/atoms/userauth";

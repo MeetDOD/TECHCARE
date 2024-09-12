@@ -19,6 +19,7 @@ import { loggedInState, userState } from '@/store/atoms/userauth';
 import { toast } from 'sonner';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const DoctorDetail = () => {
 
@@ -26,18 +27,19 @@ const DoctorDetail = () => {
     const [doctorData, setDoctorData] = useState(null);
     const [selectedDate, setSelectedDate] = useState(null);
     const [selectedTime, setSelectedTime] = useState(null);
-    const [description, setdescription] = useState("")
+    const [description, setdescription] = useState("");
+    const [loading, setloading] = useState(true);
     const user = useRecoilState(userState);
-
     const isLoggedIn = useRecoilValue(loggedInState);
-
 
     useEffect(() => {
         const fetchDoctorData = async () => {
             try {
                 const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/doctor/getdrbyid/${id}`);
                 setDoctorData(response.data.doctor);
+                setloading(false);
             } catch (error) {
+                setloading(true);
                 console.error("Error fetching doctor details:", error);
             }
         };
@@ -74,9 +76,6 @@ const DoctorDetail = () => {
         }
     }
 
-    if (!doctorData) {
-        return <div>Loading...</div>;
-    }
 
     const timeSlots = [
         "9:00 AM", "10:00 AM", "11:00 AM", "12:00 PM", "1:00 PM", "2:00 PM", "3:00 PM",
@@ -87,42 +86,59 @@ const DoctorDetail = () => {
         <div className='overflow-hidden'>
             <div className='flex flex-col sm:flex-col md:flex-col lg:flex-row gap-4'>
                 <div className='items-center flex justify-center'>
-                    <img src={doctorData.profilePhoto} className='w-full sm:max-w-80 rounded-lg border shadow-sm' style={{
-                        borderColor: `var(--borderColor)`
-                    }} />
+                    {loading ? (
+                        <Skeleton className="w-80 h-80 sm:max-w-80 rounded-lg border shadow-sm" style={{
+                            borderColor: `var(--borderColor)`
+                        }} />
+                    ) : (
+                        <img src={doctorData.profilePhoto} className='w-full sm:max-w-80 rounded-lg border shadow-sm' style={{
+                            borderColor: `var(--borderColor)`
+                        }} />
+                    )}
+
                 </div>
                 <div className='flex-1 border rounded-lg p-8 py-7 mx-2 sm:mx-0 sm:mt-0 shadow-sm' style={{
                     borderColor: `var(--borderColor)`
                 }}>
-                    <p className='flex items-center gap-1.5 text-2xl font-bold'>{doctorData.firstName} {doctorData.lastName}<MdVerified size={23} /></p>
-                    <div className='flex items-center gap-2 text-sm my-2 opacity-95 font-semibold'>
-                        <p>{doctorData.specialization}</p>
-                        <p className='py-0.5 px-2 border-2 text-xs rounded-full' style={{
-                            borderColor: `var(--borderColor)`
-                        }}>{doctorData.experience} Years</p>
-                    </div>
-
-                    <p className='text-[15px] font-medium my-1 mt-2'>Language Spoken</p>
-                    <div className='flex items-center mt-2 gap-2'>
-                        <p
-                            className='py-0.5 px-2 border-2 text-xs w-fit rounded-full border-primary bg-primary/20'
-                        >
-                            {doctorData.languageSpoken[0]}
-                        </p>
-                    </div>
-
-                    <p className='text-[15px] font-medium my-1 mt-2'>Medical Achievements</p>
-                    <div className='flex md:flex-row mt-2 opacity-90 gap-2'>
-                        <p
-                            className='py-0.5 px-2 border-2 text-sm w-fit rounded-lg border-yellow-400 bg-yellow-400/20'
-                        >
-                            {doctorData.medicalAchievements[0]}
-                        </p>
-                    </div>
-
-                    <p className='font-semibold text-lg mt-2 opacity-95'>
-                        Appointment Fee: <span className='font-bold'>$ {doctorData.consultationFee}</span>
-                    </p>
+                    {loading ? (
+                        <>
+                            <Skeleton className='h-10 w-48 mb-2' />
+                            <Skeleton className='h-5 w-32 mb-2' />
+                            <Skeleton className='h-6 w-20 mb-2' />
+                            <Skeleton className='h-6 w-36 mb-2' />
+                            <Skeleton className='h-6 w-28 mb-2' />
+                            <Skeleton className='h-8 w-28 mb-2' />
+                            <Skeleton className='h-10 w-28 mb-2' />
+                        </>
+                    ) : (
+                        <>
+                            <p className='flex items-center gap-1.5 text-2xl font-bold'>
+                                {doctorData.firstName} {doctorData.lastName}
+                                <MdVerified size={23} />
+                            </p>
+                            <div className='flex items-center gap-2 text-sm my-2 opacity-95 font-semibold'>
+                                <p>{doctorData.specialization}</p>
+                                <p className='py-0.5 px-2 border-2 text-xs rounded-full' style={{
+                                    borderColor: `var(--borderColor)`
+                                }}>{doctorData.experience} Years</p>
+                            </div>
+                            <p className='text-[15px] font-medium my-1 mt-2'>Language Spoken</p>
+                            <div className='flex items-center mt-2 gap-2'>
+                                <p className='py-0.5 px-2 border-2 text-xs w-fit rounded-full border-primary bg-primary/20'>
+                                    {doctorData.languageSpoken[0]}
+                                </p>
+                            </div>
+                            <p className='text-[15px] font-medium my-1 mt-2'>Medical Achievements</p>
+                            <div className='flex md:flex-row mt-2 opacity-90 gap-2'>
+                                <p className='py-0.5 px-2 border-2 text-sm w-fit rounded-lg border-yellow-400 bg-yellow-400/20'>
+                                    {doctorData.medicalAchievements[0]}
+                                </p>
+                            </div>
+                            <p className='font-semibold text-lg mt-2 opacity-95'>
+                                Appointment Fee: <span className='font-bold'>$ {doctorData.consultationFee}</span>
+                            </p>
+                        </>
+                    )}
                 </div>
             </div>
 

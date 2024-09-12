@@ -9,7 +9,8 @@ import { FaGithub, FaLinkedin } from "react-icons/fa";
 
 const ContactUs = () => {
     useEffect(() => {
-        window.scrollTo(0, 0)
+        window.scrollTo(0, 0);
+        document.title = "TECHCARE | CONTACT US";
     }, []);
     return (
         <section class="py-24">

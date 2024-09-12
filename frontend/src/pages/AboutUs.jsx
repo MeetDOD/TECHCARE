@@ -6,7 +6,8 @@ import about from "../assets/team/about.png"
 
 const AboutUs = () => {
     useEffect(() => {
-        window.scrollTo(0, 0)
+        window.scrollTo(0, 0);
+        document.title = "TECHCARE | ABOUT TECHCARE";
     }, []);
     return (
         <div className="2xl:container lg:py-16  md:py-12 py-9 ">
