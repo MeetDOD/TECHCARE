@@ -15,7 +15,7 @@ const DoctorAppoinments = () => {
                 Authorization: `Bearer ${localStorage.getItem("doctortoken")}`,
             };
             const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/appointment/getdoctorappointment`, { headers });
-            setdoctorAppoinments(res.data.data);
+            setdoctorAppoinments(res.data.data.reverse());
             setLoading(false);
             document.title = `TECHCARE | PATIENT APPOINMENTS`;
         } catch (error) {

@@ -34,8 +34,6 @@ const MapComponent = () => {
             (err) => console.error(err),
             { enableHighAccuracy: true }
         );
-        document.title = "TECHCARE | MAP";
-
     }, []);
 
     const fetchNearbyPlaces = async (query, setPlaces) => {
@@ -92,9 +90,9 @@ const MapComponent = () => {
             </div>
             <div>
                 {loading ? (
-                    <Skeleton className="w-full" />
+                    <Skeleton className="w-full h-screen rounded-lg shadow-lg" />
                 ) : (position && (
-                    <MapContainer center={position} zoom={15} className="h-screen w-full rounded-lg shadow-lg -z-50">
+                    <MapContainer center={position} zoom={15} className="h-screen w-full rounded-lg shadow-lg -z-0">
                         <TileLayer
                             url={`https://api.maptiler.com/maps/streets-v2/256/{z}/{x}/{y}.png?key=${import.meta.env.VITE_MAP_KEY}`}
                         />

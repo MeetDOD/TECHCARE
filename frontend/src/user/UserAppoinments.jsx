@@ -15,7 +15,7 @@ const UserAppoinments = () => {
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
             };
             const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/appointment/getpatientappointment`, { headers });
-            setuserappoinments(res.data.data)
+            setuserappoinments(res.data.data.reverse())
             setLoading(false);
             document.title = `TECHCARE | YOUR APPOINMENTS`;
         } catch (error) {
@@ -67,6 +67,11 @@ const UserAppoinments = () => {
                 { appointmentId: id },
                 { headers });
 
+            setuserappoinments((prevAppointments) =>
+                prevAppointments.map((appointment) =>
+                    appointment._id === id ? { ...appointment, status: 'cancelled' } : appointment
+                )
+            );
             toast.success(response.data.message)
         } catch (error) {
             console.log(error);

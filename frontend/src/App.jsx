@@ -32,30 +32,29 @@ function App() {
           <GoogleTranslate />
         </div>
         <Routes>
-          <>
-            <Route path="/" element={<Home />} />
-            <Route path="/doctors" element={<Doctors />} />
-            <Route path="/about" element={<AboutUs />} />
-            <Route path="/contact" element={<ContactUs />} />
-            <Route path="/doctordetail/:id" element={<DoctorDetail />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/doctors" element={<Doctors />} />
+          <Route path="/about" element={<AboutUs />} />
+          <Route path="/contact" element={<ContactUs />} />
+          <Route path="/doctordetail/:id" element={<DoctorDetail />} />
 
-            <Route path="/map" element={
-              <ProtectedRoute>
-                <MapComponent />
-              </ProtectedRoute>
-            } />
+          <Route path="/map" element={
+            <ProtectedRoute>
+              <MapComponent />
+            </ProtectedRoute>
+          } />
 
-            <Route path="/patientprofile" element={
-              <ProtectedRoute>
-                {user ? <PatientTabs /> : <Navigate to="/" replace />}
-              </ProtectedRoute>
-            } />
-            <Route path="/doctorprofile" element={
-              <ProtectedRoute>
-                {!user ? <DoctorTabs /> : <Navigate to="/" replace />}
-              </ProtectedRoute>
-            } />
-          </>
+          <Route path="/patientprofile" element={
+            <ProtectedRoute>
+              {user ? <PatientTabs /> : <Navigate to="/" replace />}
+            </ProtectedRoute>
+          } />
+          <Route path="/doctorprofile" element={
+            <ProtectedRoute>
+              {!user ? <DoctorTabs /> : <Navigate to="/" replace />}
+            </ProtectedRoute>
+          } />
+
           {!isLoggedIn ? (
             <>
               <Route path="/login" element={<Login />} />
@@ -66,6 +65,7 @@ function App() {
           ) : (
             <Route path="*" element={<Navigate to="/" />} />
           )}
+
         </Routes>
         <Toaster richColors />
       </div>

@@ -50,7 +50,7 @@ const Hero = () => {
                                 Instant appointment with doctors
                             </h1>
                             <p className="text-base sm:text-lg md:text-lg lg:text-xl mt-4 font-semibold opacity-95">
-                                Consult top doctors online for any health concern
+                                Consult top doctors online for any health concern <br />
                                 Private online consultations with verified doctors in all specialists
                             </p>
                         </div>
