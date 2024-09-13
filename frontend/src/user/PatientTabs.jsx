@@ -2,7 +2,6 @@ import React from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import UserProfile from "./UserProfile"
 import UserAppointments from './UserAppoinments'
-import { Button } from '@/components/ui/button'
 import { useResetRecoilState } from 'recoil'
 import { tokenState, userState } from '@/store/atoms/userauth'
 import { toast } from 'sonner'
@@ -11,6 +10,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import healthTips from "./healthTips";
+import ChooseModel from './ChooseModel'
 
 const PatientTabs = () => {
     const resetToken = useResetRecoilState(tokenState);
@@ -65,7 +65,7 @@ const PatientTabs = () => {
                 }} >
                     <TabsTrigger className="py-2" value="profile">My Profile</TabsTrigger>
                     <TabsTrigger className="py-2" value="appointments">My Appointments</TabsTrigger>
-                    <Button variant="destructive" onClick={handleLogout} className="py-2 mx-2" >Logout</Button>
+                    <TabsTrigger className="py-2" value="aimodel" >Explore AI</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="profile" className="flex flex-col justify-center items-center">
@@ -73,6 +73,9 @@ const PatientTabs = () => {
                 </TabsContent>
                 <TabsContent value="appointments">
                     <UserAppointments />
+                </TabsContent>
+                <TabsContent value="aimodel">
+                    <ChooseModel />
                 </TabsContent>
             </Tabs>
             <div>
