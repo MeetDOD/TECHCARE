@@ -17,12 +17,13 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { toast } from 'sonner';
 import { userupdateProfile } from '@/apis/userapi';
+import axios from 'axios';
 
 const UserProfile = () => {
 
     const user = useRecoilValue(userState);
     const setUser = useSetRecoilState(userState);
-
+    const userId = user._id;
     const [profilePhoto, setprofilePhoto] = useState(null);
     const [photoPreview, setPhotoPreview] = useState(user.photo || "");
     const [firstName, setfirstName] = useState("");
@@ -59,7 +60,6 @@ const UserProfile = () => {
 
         try {
             const response = await userupdateProfile(formData);
-            console.log(response);
             if (response.status === 200) {
                 toast.success("Profile updated successfully");
                 const updatedUser = response.data.user;
@@ -70,9 +70,32 @@ const UserProfile = () => {
             }
         } catch (error) {
             toast.error("Please fill properly");
-            console.log(error);
         }
     };
+
+    useEffect(() => {
+        const fetchDoctorData = async () => {
+            try {
+                const headers = {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                };
+                const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/user/getuserbyid/${userId}`, { headers });
+                const user = response.data.user;
+                setprofilePhoto(user.photo || "");
+                setfirstName(user.firstName || "");
+                setlastName(user.lastName || "");
+                setphoneno(user.phoneno || "");
+                setgender(user.gender || "");
+                const formattedDate = new Date(user.dateofbirth).toISOString().slice(0, 10);
+                setdateofbirth(formattedDate);
+            } catch (error) {
+                toast.error("Error fetching user details");
+            }
+        };
+        if (userId) {
+            fetchDoctorData();
+        }
+    }, []);
 
     return (
         <div>

@@ -159,7 +159,8 @@ const DoctorProfile = () => {
                 setlastName(doctor.lastName || "");
                 setcontactNo(doctor.contactNo || "");
                 setgender(doctor.gender || "");
-                setdateofbirth(doctor.datOfBirth || "");
+                const formattedDate = new Date(doctor.datOfBirth).toISOString().slice(0, 10);
+                setdateofbirth(formattedDate);
                 setresidentialAddress(doctor.residentialAddress || "");
                 sethospitalAddress(doctor.hospitalAddress || "");
                 setspecialization(doctor.specialization || "");
@@ -178,7 +179,6 @@ const DoctorProfile = () => {
             fetchDoctorData();
         }
     }, []);
-
 
     return (
         <div>
