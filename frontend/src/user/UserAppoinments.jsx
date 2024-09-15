@@ -4,6 +4,7 @@ import axios from 'axios';
 import { toast } from 'sonner';
 import { Skeleton } from '@/components/ui/skeleton';
 import { RiCalendarScheduleLine } from "react-icons/ri";
+import { SiGooglemeet } from "react-icons/si";
 
 const UserAppoinments = () => {
 
@@ -18,6 +19,7 @@ const UserAppoinments = () => {
             const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/appointment/getpatientappointment`, { headers });
             setuserappoinments(res.data.data.reverse())
             setLoading(false);
+            console.log(res.data.data)
             document.title = `TECHCARE | YOUR APPOINMENTS`;
         } catch (error) {
             console.log(error);
@@ -184,6 +186,13 @@ const UserAppoinments = () => {
                                     Cancel Appointment
                                 </Button>
                             )}
+                            {item.meetLink &&
+                                <a target="_blank" className="w-full flex flex-col" href={item.meetLink}>
+                                    <Button>
+                                        Join Google Meet
+                                    </Button>
+                                </a>
+                            }
                         </div>
 
                     </div>

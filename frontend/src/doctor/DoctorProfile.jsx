@@ -43,6 +43,7 @@ const DoctorProfile = () => {
     const [hospital, sethospital] = useState("");
     const [availableDay, setavailableDay] = useState("");
     const [certificate, setcertificate] = useState("");
+    const [refreshToken, setRefreshToken] = useState(null);
 
     const [languageSpoken, setLanguageSpoken] = useState("");
     const [languages, setLanguages] = useState([]);
@@ -171,6 +172,7 @@ const DoctorProfile = () => {
                 setconsultationFee(doctor.consultationFee || "");
                 setmedicalAchievements(doctor.medicalAchievements || "");
                 setLanguages(doctor.languageSpoken || "");
+                setRefreshToken(doctor.refreshToken || null);
             } catch (error) {
                 console.error("Error fetching doctor details:", error);
             }
@@ -182,7 +184,6 @@ const DoctorProfile = () => {
 
     const authorizemeet = async () => {
         try {
-            // const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/meet/authintialise`);
             window.location.href = `${import.meta.env.VITE_BASE_URL}/api/meet/authintialise/${doctorId}`;
         } catch (error) {
             console.error("Error authorizing meet:", error);
@@ -222,15 +223,19 @@ const DoctorProfile = () => {
                             Email Id: <span className='opacity-90'>{doctor.email}</span>
                         </p>
                     </div>
-                    <div className="gap-1.5">
+                    <div className="gap-1.5 mb-4">
                         <p className="font-medium">
                             Password: <span className='opacity-90'> ******</span>
                         </p>
                     </div>
-                    <button type='button' onClick={authorizemeet} className="mt-4 w-full text-white hover:opacity-90 bg-primary rounded-lg py-2">Authorize Google Meet</button>
+                    {!refreshToken && (
+                        <Button type='button' onClick={authorizemeet} variant="ghost" className="w-full border rounded-lg">
+                            Authorize Google Meet
+                        </Button>
+                    )}
                     <Dialog>
                         <DialogTrigger asChild>
-                            <Button className="mt-4 w-full text-white hover:opacity-90 bg-primary rounded-lg py-2">Edit Profile</Button>
+                            <Button className="w-full text-white hover:opacity-90 bg-primary rounded-lg py-2">Edit Profile</Button>
                         </DialogTrigger>
                         <DialogContent style={{
                             backgroundColor: `var(--background-color)`,

@@ -45,8 +45,18 @@ function App() {
               <MapComponent />
             </ProtectedRoute>
           } />
-          <Route path="/success" element={<PaymentSuccess />} />
-          <Route path="/failure" element={<PaymentFailure />} />
+
+          <Route path="/success" element={
+            <ProtectedRoute>
+              {user ? <PaymentSuccess /> : <Navigate to="/" replace />}
+            </ProtectedRoute>
+          } />
+
+          <Route path="/failure" element={
+            <ProtectedRoute>
+              {user ? <PaymentFailure /> : <Navigate to="/" replace />}
+            </ProtectedRoute>
+          } />
 
           <Route path="/patientprofile" element={
             <ProtectedRoute>

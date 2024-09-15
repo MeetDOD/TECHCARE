@@ -19,6 +19,7 @@ const DoctorAppoinments = () => {
             setdoctorAppoinments(res.data.data.reverse());
             setLoading(false);
             document.title = `TECHCARE | PATIENT APPOINMENTS`;
+            console.log(res.data.data)
         } catch (error) {
             console.log(error);
         }
@@ -193,6 +194,13 @@ const DoctorAppoinments = () => {
                                     <Button className="w-full py-2" variant="destructive" onClick={() => cancelAppoinment(item._id)}>
                                         Cancel Appointment
                                     </Button>
+                                }
+                                {item.meetLink &&
+                                    <a target="_blank" className="w-full flex flex-col" href={item.meetLink}>
+                                        <Button>
+                                            Join Google Meet
+                                        </Button>
+                                    </a>
                                 }
                             </div>
 
