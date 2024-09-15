@@ -21,48 +21,48 @@ const FAQ = () => {
     const questionsLeft = [
         {
             id: 1,
-            question: "What is the mode of the Hackathon?",
-            answer: "VCET Hackathon’24 Code the cosmos will be held offline.",
+            question: "How can I register as a new patient?",
+            answer: "To register, click on the 'Sign Up' button on the homepage and fill out the required information including your personal details, medical history, and contact information.",
         },
         {
             id: 2,
-            question: "Who can participate?",
+            question: "How do I schedule an appointment?",
             answer:
-                "Any UG student is welcome to participate in this event. While experienced coding and programming is a huge plus, teams will also need people with strong presentation skills and unique ideas.",
+                "You can schedule an appointment by navigating to the 'Appointments' section. Select your preferred doctor, available time slot, and provide details about your health concern.",
         },
         {
             id: 3,
-            question: "Can a pass out student participate in the event?",
+            question: "Can I view my previous medical records?",
             answer:
-                "No, every member of the team must be a current student of a university or a college. (Members from different colleges allowed).",
+                "Yes, once logged in, you can access your medical records from the 'Health Records' section. This includes past consultations, prescriptions, and test results.",
         },
         {
             id: 5,
-            question: "How much is the entry fee and the last date for registration?",
-            answer: "Entry fee is 500/- per head and the last date of registration is September 22, 2024."
+            question: "How secure is my personal health information?",
+            answer: "We prioritize your privacy and security. All your personal and health data is encrypted and complies with healthcare privacy standards such as HIPAA.",
         }
     ];
 
     const questionsRight = [
         {
             id: 7,
-            question: "Will a dataset be provided?",
-            answer: "No, the data has to be collected on your own."
+            question: "Can I cancel or reschedule an appointment?",
+            answer: "Yes, appointments can be canceled or rescheduled from the 'Appointments' section, provided you make the changes at least 24 hours in advance.",
         },
         {
             id: 9,
-            question: "What is the selection criteria?",
-            answer: "Innovation, Technology, Completion & Business Values are some of the criterias."
+            question: "Is there an option for online consultation?",
+            answer: "Yes, we offer online video consultations with doctors. You can select this option while scheduling your appointment.",
         },
         {
             id: 10,
-            question: "When and where will the final results be announced?",
-            answer: "Results will be announced at the end of the Final Pitching round."
+            question: "How do I update my personal or medical information?",
+            answer: "You can update your information by visiting the 'Profile' section and editing your details. Ensure that all your medical records are accurate and up-to-date.",
         },
         {
             id: 11,
-            question: "What is the cancellation policy like?",
-            answer: "There is no cancellation policy and payment once done will not be refunded."
+            question: "Are my video consultations recorded?",
+            answer: "No, video consultations are not recorded to ensure your privacy. All consultations are secure and confidential.",
         }
     ];
 
