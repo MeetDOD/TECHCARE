@@ -18,6 +18,7 @@ import { IoIosAddCircleOutline } from "react-icons/io";
 import { toast } from 'sonner';
 import { userupdateProfile } from '@/apis/userapi';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const UserProfile = () => {
 
@@ -31,6 +32,7 @@ const UserProfile = () => {
     const [phoneno, setphoneno] = useState("");
     const [gender, setgender] = useState("");
     const [dateofbirth, setdateofbirth] = useState("");
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (user) {
@@ -72,6 +74,9 @@ const UserProfile = () => {
             toast.error("Please fill properly");
         }
     };
+
+
+
 
     useEffect(() => {
         const fetchDoctorData = async () => {
@@ -131,6 +136,7 @@ const UserProfile = () => {
                             Password: <span className='opacity-90'>*****</span>
                         </p>
                     </div>
+
 
                     <Drawer>
                         <DrawerTrigger className="mt-4 w-full text-white hover:opacity-90 bg-primary rounded-lg py-2">
