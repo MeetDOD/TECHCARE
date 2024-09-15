@@ -78,6 +78,20 @@ const UserAppoinments = () => {
         }
     };
 
+    const handlePayment = async (id) => {
+        try {
+            const headers = {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+            };
+
+            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/booking/checkout/${id}`, {}, { headers });
+            window.location.href = response.data.session.url;
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+
     return (
         <div className=''>
             <p className='font-semibold text-lg'>My Appoinments</p>
@@ -123,10 +137,18 @@ const UserAppoinments = () => {
                                     Not Paid
                                 </Button>
                             ) : (
-                                <Button className="sm:min-w-48 py-2">
-                                    Pay Now
-                                </Button>
+                                item.payment === 'unpaid' ? (
+                                    <Button onClick={() => handlePayment(item._id)} className="sm:min-w-48 py-2">
+                                        Pay Now
+                                    </Button>
+                                ) : (
+                                    <Button className="sm:min-w-48 py-2" disabled>
+                                        Payment completed
+                                    </Button>
+                                )
                             )}
+
+
                             {item.status === 'cancelled' ? (
                                 <Button className="sm:min-w-48 py-2" variant="destructive" disabled>
                                     Canceled

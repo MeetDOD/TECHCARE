@@ -18,6 +18,8 @@ import Footer from "./home/Footer";
 import AboutUs from "./pages/AboutUs";
 import ContactUs from "./pages/ContactUs";
 import GoogleTranslate from "./snippets/GoogleTranslate";
+import PaymentSuccess from "./pages/Successpage";
+import PaymentFailure from "./pages/Failurepage";
 
 function App() {
 
@@ -43,6 +45,8 @@ function App() {
               <MapComponent />
             </ProtectedRoute>
           } />
+          <Route path="/success" element={<PaymentSuccess />} />
+          <Route path="/failure" element={<PaymentFailure />} />
 
           <Route path="/patientprofile" element={
             <ProtectedRoute>
