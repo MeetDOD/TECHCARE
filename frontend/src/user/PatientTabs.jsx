@@ -63,8 +63,8 @@ const PatientTabs = () => {
                 <TabsList className="my-5 gap-2 py-2 flex justify-center flex-1 items-center " style={{
                     backgroundColor: `var(--background-color)`,
                 }} >
-                    <TabsTrigger className="py-2" value="profile">My Profile</TabsTrigger>
-                    <TabsTrigger className="py-2" value="appointments">My Appointments</TabsTrigger>
+                    <TabsTrigger className="py-2" value="profile">Profile</TabsTrigger>
+                    <TabsTrigger className="py-2" value="appointments">Appointments</TabsTrigger>
                     <TabsTrigger className="py-2" value="aimodel" >Explore AI</TabsTrigger>
                 </TabsList>
 

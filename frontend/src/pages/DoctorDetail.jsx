@@ -20,6 +20,7 @@ import { toast } from 'sonner';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useNavigate } from 'react-router-dom/dist';
 
 const DoctorDetail = () => {
 
@@ -31,6 +32,7 @@ const DoctorDetail = () => {
     const [loading, setloading] = useState(true);
     const user = useRecoilState(userState);
     const isLoggedIn = useRecoilValue(loggedInState);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchDoctorData = async () => {
@@ -71,6 +73,7 @@ const DoctorDetail = () => {
 
             const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/appointment/bookappointment`, appointmentData, { headers });
             toast.success(response.data.message);
+            navigate("/doctors")
         } catch (error) {
             toast.error("Error in booking appoinment");
         }
@@ -196,7 +199,7 @@ const DoctorDetail = () => {
 
                         <div className='flex sm:flex-row flex-col justify-center items-center gap-2 gap-y-3'>
                             <Button onClick={handleSubmit} className="py-5 text-[16px] w-full" type="submit">
-                                Confirm Appointment
+                                Book Appointment
                             </Button>
                             <DialogClose asChild>
                                 <Button type="button" variant="secondary" className=" py-5 text-[16px] w-full">

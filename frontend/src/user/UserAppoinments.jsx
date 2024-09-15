@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button'
 import axios from 'axios';
 import { toast } from 'sonner';
 import { Skeleton } from '@/components/ui/skeleton';
+import { RiCalendarScheduleLine } from "react-icons/ri";
 
 const UserAppoinments = () => {
 
@@ -86,6 +87,7 @@ const UserAppoinments = () => {
 
             const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/booking/checkout/${id}`, {}, { headers });
             window.location.href = response.data.session.url;
+            console.log(response.data.id)
         } catch (error) {
             console.log(error);
         }
@@ -93,72 +95,97 @@ const UserAppoinments = () => {
 
 
     return (
-        <div className=''>
-            <p className='font-semibold text-lg'>My Appoinments</p>
+        <div>
+            <p className='flex items-center gap-1 font-semibold text-lg'><RiCalendarScheduleLine size={25} /> Appointments Scheduled</p>
             {loading ? (
                 Array.from({ length: 6 }).map((index) => (
-                    <div key={index} className='my-5 grid grid-cols-[1fr_2fr] gap-4 sm:flex sm:gap-6 py-2 border px-2 rounded-lg' style={{ borderColor: `var(--borderColor)` }}>
-                        <Skeleton className='w-32 h-32 rounded-lg' />
-                        <div className='flex-1 text-sm'>
-                            <Skeleton className='h-4 w-40' />
-                            <Skeleton className='h-4 w-28 my-2' />
-                            <Skeleton className='h-4 w-56 my-2' />
-                            <Skeleton className='h-4 w-24 my-2' />
-                            <Skeleton className='h-4 w-32 my-2' />
+                    <div key={index} className='my-3 grid grid-cols-1 sm:grid-cols-[auto_3fr_1fr] gap-4 py-4 border-2 px-4 rounded-lg shadow-sm' style={{ borderColor: `var(--borderColor)` }}>
+                        <div className='flex justify-center'>
+                            <Skeleton className='w-32 h-32 object-cover rounded-lg' />
                         </div>
-                        <div className='flex flex-col gap-2 justify-end my-auto'>
-                            <Skeleton className='h-10 sm:min-w-48 py-2' />
-                            <Skeleton className='h-10 sm:min-w-48 py-2' />
+                        <div className='flex-1 text-sm'>
+                            <Skeleton className='h-6 w-40 mb-2' />
+                            <div className='flex items-center gap-1 mb-2'>
+                                <Skeleton className='h-4 w-32' />
+                                <Skeleton className='h-4 w-24' />
+                            </div>
+                            <Skeleton className='h-4 w-56 mb-2' />
+                            <Skeleton className='h-4 w-24 mb-2' />
+                            <Skeleton className='h-4 w-64 mb-2' />
+                        </div>
+                        <div className="flex flex-col gap-2 items-end justify-center">
+                            <Skeleton className="h-10 w-full py-2" />
+                            <Skeleton className="h-10 w-full py-2" />
                         </div>
                     </div>
+
                 ))
+            ) : userAppoinments.length === 0 ? (
+                <div className='text-center my-20 font-bold text-2xl'>
+                    <h1><span className='text-primary text-3xl'>Currently,</span> there are no appointments scheduled</h1>
+                </div>
             ) : (
                 userAppoinments.map((item, index) => (
-                    <div className='my-5 grid grid-cols-[1fr_2fr] gap-4 sm:flex sm:gap-6 py-2 border px-2 rounded-lg' style={{
+                    <div className='my-3 grid grid-cols-1 sm:grid-cols-[auto_3fr_1fr] gap-4 py-4 border-2  px-4 rounded-lg shadow-sm' style={{
                         borderColor: `var(--borderColor)`,
                     }}>
-                        <div>
-                            <img className='w-32 rounded-lg' src={item.doctorPhoto} alt={item.doctorName} />
+                        <div className='flex justify-center'>
+                            <img className='w-32 h-32 object-cover rounded-lg' src={item.doctorPhoto} alt={item.doctorName} />
                         </div>
+
                         <div className='flex-1 text-sm'>
-                            <p className='font-bold my-1'>{item.doctorName}</p>
-                            <p className='mb-1 opacity-95 font-semibold flex items-center gap-1'>Doctor approval:
-                                <span className={`py-0.5 px-2 border-2 text-xs w-fit rounded-full ${getStatusColor(item.status)}`}>
+                            <p className='font-bold text-lg my-1'>{item.doctorName}</p>
+                            <p className='mb-1 font-bold flex items-center gap-1'>
+                                Approval Status:
+                                <span className={`py-0.5 px-2 border-2 text-xs rounded-full ${getStatusColor(item.status)}`}>
                                     {item.status}
                                 </span>
                             </p>
-                            <p className='text-sm font-semibold mb-1'>Date & Time: {formatDate(item.date)} | {item.time}</p>
-                            <p className='text-sm mb-1'>Payment: <span className={`text-xs border-2 rounded-full w-fit px-1 ${getPaymentColor(item.payment)}`}>{item.payment}</span></p>
-                            <p className='mb-1 opacity-90'>Description: {item.description}</p>
+                            <p className='text-sm font-medium mb-1 '>
+                                Date & Time: {formatDate(item.date)} | {item.time}
+                            </p>
+                            <p className='text-sm font-bold mb-1 opacity-98'>
+                                Payment: <span className={`text-xs border-2 rounded-full px-1.5 py-0.5 ${getPaymentColor(item.payment)}`}>
+                                    {item.payment}
+                                </span>
+                            </p>
+                            <p className='mb-1 opacity-95 font-medium'>
+                                Description: {item.description}
+                            </p>
                         </div>
-                        <div className='flex flex-col gap-2 justify-end my-auto'>
-                            {item.status === 'cancelled' ? (
-                                <Button className="sm:min-w-48 py-2" disabled>
-                                    Not Paid
+
+                        <div className="flex flex-col gap-2 items-end justify-center">
+                            {item.status === 'pending' ? (
+                                <Button className="w-full py-2 bg-yellow-500 text-white hover:bg-yellow-600" disabled>
+                                    Doctor Approval Pending
                                 </Button>
-                            ) : (
+                            ) : item.status === 'accepted' ? (
                                 item.payment === 'unpaid' ? (
-                                    <Button onClick={() => handlePayment(item._id)} className="sm:min-w-48 py-2">
+                                    <Button onClick={() => handlePayment(item._id)} className="w-full py-2">
                                         Pay Now
                                     </Button>
                                 ) : (
-                                    <Button className="sm:min-w-48 py-2" disabled>
-                                        Payment completed
+                                    <Button className="w-full py-2 bg-green-500 text-white hover:bg-green-600" disabled>
+                                        Payment Completed
                                     </Button>
                                 )
+                            ) : (
+                                <Button className="w-full py-2 bg-red-500 text-white" disabled>
+                                    Appointment Canceled
+                                </Button>
                             )}
 
-
-                            {item.status === 'cancelled' ? (
-                                <Button className="sm:min-w-48 py-2" variant="destructive" disabled>
-                                    Canceled
+                            {item.status === 'cancelled' || item.payment === 'paid' ? (
+                                <Button className="w-full py-2" variant="destructive" disabled>
+                                    {item.payment === 'paid' ? 'Appointment Completed' : 'Appointment Canceled'}
                                 </Button>
                             ) : (
-                                <Button className="sm:min-w-48 py-2" variant="destructive" onClick={() => cancelAppoinment(item._id)}>
+                                <Button className="w-full py-2" variant="destructive" onClick={() => cancelAppoinment(item._id)}>
                                     Cancel Appointment
                                 </Button>
                             )}
                         </div>
+
                     </div>
                 )))}
         </div>

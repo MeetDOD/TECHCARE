@@ -180,6 +180,15 @@ const DoctorProfile = () => {
         }
     }, []);
 
+    const authorizemeet = async () => {
+        try {
+            // const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/meet/authintialise`);
+            window.location.href = `${import.meta.env.VITE_BASE_URL}/api/meet/authintialise/${doctorId}`;
+        } catch (error) {
+            console.error("Error authorizing meet:", error);
+        }
+    }
+
     return (
         <div>
             <div className="mb-4">
@@ -218,6 +227,7 @@ const DoctorProfile = () => {
                             Password: <span className='opacity-90'> ******</span>
                         </p>
                     </div>
+                    <button type='button' onClick={authorizemeet} className="mt-4 w-full text-white hover:opacity-90 bg-primary rounded-lg py-2">Authorize Google Meet</button>
                     <Dialog>
                         <DialogTrigger asChild>
                             <Button className="mt-4 w-full text-white hover:opacity-90 bg-primary rounded-lg py-2">Edit Profile</Button>

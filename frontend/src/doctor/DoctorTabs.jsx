@@ -27,8 +27,8 @@ const DoctorTabs = () => {
                 <TabsList className="my-5 gap-2 py-2 flex justify-center flex-1 items-center " style={{
                     backgroundColor: `var(--background-color)`,
                 }} >
-                    <TabsTrigger className="py-2" value="profile">My Profile</TabsTrigger>
-                    <TabsTrigger className="py-2" value="appointments">Appointments Books</TabsTrigger>
+                    <TabsTrigger className="py-2" value="profile">Profile</TabsTrigger>
+                    <TabsTrigger className="py-2" value="appointments">Appointments</TabsTrigger>
                     <Button variant="destructive" onClick={handleLogout} className="py-2 mx-2" >Logout</Button>
                 </TabsList>
 
