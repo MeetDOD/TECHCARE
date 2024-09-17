@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import logo from "../assets/Hero/logo.png";
 import { MdOutlineEmail } from "react-icons/md";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
+import Swal from "sweetalert2";
 
 const ContactUs = () => {
   const [successMessage, setSuccessMessage] = useState(""); // State to handle success message
@@ -34,11 +35,11 @@ const ContactUs = () => {
     }).then((res) => res.json());
 
     if (res.success) {
-      setSuccessMessage("Your message has been sent successfully!");
-    } else {
-      setSuccessMessage(
-        "There was an error submitting your message. Please try again."
-      );
+      Swal.fire({
+        title: "Success!",
+        text: "Message sent successfully!",
+        icon: "success",
+      });
     }
   };
 
