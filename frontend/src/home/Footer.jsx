@@ -6,7 +6,7 @@ import { FaUserDoctor } from "react-icons/fa6";
 import { MdCall } from "react-icons/md";
 
 const socialLinks = [
-    { id: 'github', url: 'https://github.com/MeetDOD/code_o_festa_2024', icon: FaGithub },
+    { id: 'github', url: 'https://github.com/MeetDOD', icon: FaGithub },
     { id: 'linkedin', url: 'https://www.linkedin.com/in/meetdodiya', icon: FaLinkedin }
 ];
 

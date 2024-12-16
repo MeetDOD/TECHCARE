@@ -65,6 +65,7 @@ const ContactUs = () => {
                                     name="name"
                                     className="my-2 mb-4"
                                     placeholder="Enter your name"
+                                    required
                                 />
 
                                 <Label>Email</Label>
@@ -73,6 +74,7 @@ const ContactUs = () => {
                                     name="email"
                                     className="my-2 mb-4"
                                     placeholder="Enter your email"
+                                    required
                                 />
 
                                 <Label>Description</Label>
@@ -80,6 +82,7 @@ const ContactUs = () => {
                                     name="description"
                                     placeholder="Type your message here..."
                                     className="my-2 mb-4"
+                                    required
                                 />
 
                                 <Button type="submit" className="w-full my-2">
