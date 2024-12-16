@@ -20,7 +20,7 @@ const ContactUs = () => {
         event.preventDefault();
         const formData = new FormData(event.target);
 
-        formData.append("access_key", "13408535-a1fa-45da-ae83-d2b3d2d6ed28");
+        formData.append("access_key", import.meta.env.CONTACTUS_KEY);
 
         const object = Object.fromEntries(formData);
         const json = JSON.stringify(object);
